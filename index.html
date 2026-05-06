@@ -1,943 +1,665 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MD Talk — Sala de Espera</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Raleway:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<p>The Confident Traveler — Módulo Bônus Final</p>
 <style>
-  :root {
-    --navy:       #0B1D3A;
-    --navy-deep:  #050D1A;
-    --navy-mid:   #0F2645;
-    --navy-light: #163158;
-    --gold:       #C4A45A;
-    --gold-light: #D4BA7A;
-    --gold-pale:  #E8D9B0;
-    --cream:      rgba(255,255,255,.88);
-    --muted:      rgba(255,255,255,.42);
-    --snake-head: #C4A45A;
-    --snake-body: #D4BA7A;
-    --snake-tail: rgba(196,164,90,0.4);
-    --cell:       44px;
-  }
+:root{
+  --bg:#F4F3EF;
+  --bg-warm:#ECE9E3;
+  --bg-card:#FFFFFF;
+  --ink:#161819;
+  --ink-s:#2F3234;
+  --ink-m:#868380;
+  --teal:#1A4B52;
+  --teal-d:#123840;
+  --teal-l:#266A74;
+  --teal-bg:#EBF3F4;
+  --ivory:#F5F2EB;
+  --ivory-d:#E8E3D8;
+  --bronze:#A68B5B;
+  --bronze-l:#C4A872;
+  --bronze-d:#7E6A44;
+  --bronze-bg:#F7F4ED;
+  --sand:#B8AD9A;
+  --sand-bg:#F3F0EB;
+  --warm:#8A7E70;
+  --warm-bg:#F0EDEA;
+  --clay:#9A7568;
+  --clay-bg:#F5EFEC;
+  --brd:#DBD7CF;
+  --brd-l:#E6E3DC;
+  --fd:'Instrument Serif',Georgia,serif;
+  --fb:'Plus Jakarta Sans',sans-serif;
+  --fm:'JetBrains Mono',monospace;
+  --r:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--ink);line-height:1.78;font-size:16.5px;-webkit-font-smoothing:antialiased}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(155deg,#0C2428 0%,#123840 28%,#1A4B52 52%,#123840 78%,#0C2428 100%)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 42% at 35% 48%,rgba(166,139,91,.06) 0%,transparent 55%),radial-gradient(ellipse 40% 35% at 65% 45%,rgba(196,168,114,.03) 0%,transparent 50%);z-index:1}
+.hero::after{content:'';position:absolute;inset:0;opacity:.1;background-image:url("data:image/svg+xml,%3Csvg width='70' height='70' xmlns='<a href="http://www.w3.org/2000/svg" class="redactor-autoparser-object">http://www.w3.org/2000/svg</a>'%3E%3Ccircle cx='35' cy='35' r='.7' fill='%23C4A872' fill-opacity='.06'/%3E%3C/svg%3E");z-index:1}
+.hero-c{position:relative;z-index:2;text-align:center;padding:2rem;max-width:780px;animation:hIn 1.3s ease-out}
+@keyframes hIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+.hero-badge{display:inline-block;font-family:var(--fb);font-size:.63rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--bronze-l);border:1px solid rgba(196,168,114,.18);padding:.42rem 1.3rem;border-radius:100px;margin-bottom:2rem;background:rgba(196,168,114,.04)}
+.hero h1{font-family:var(--fd);font-size:clamp(2.5rem,5.8vw,4.8rem);font-weight:400;color:#F4F3EF;line-height:1.1}
+.hero h1 em{font-style:italic;color:var(--bronze-l)}
+.hero-line{width:50px;height:1px;background:var(--bronze);margin:1.8rem auto;opacity:.2}
+.hero-sub{font-family:var(--fd);font-size:1.12rem;color:rgba(244,243,239,.3);font-style:italic;line-height:1.7;max-width:500px;margin:0 auto}
+.hero-scroll{margin-top:3rem;display:flex;flex-direction:column;align-items:center;gap:.4rem;color:rgba(244,243,239,.12);font-family:var(--fb);font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;animation:pls 2.5s ease-in-out infinite}
+.hero-scroll svg{width:15px;height:15px;stroke:rgba(244,243,239,.12)}
+@keyframes pls{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:.8;transform:translateY(5px)}}
 
-  html, body {
-    width: 100%; height: 100%;
-    background: var(--navy-deep);
-    font-family: 'Raleway', sans-serif;
-    overflow: hidden;
-    color: var(--cream);
-  }
+.nav{position:sticky;top:0;z-index:100;background:rgba(244,243,239,.94);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--brd-l)}
+.nav-in{max-width:1200px;margin:0 auto;padding:0 2rem;overflow-x:auto;scrollbar-width:none}.nav-in::-webkit-scrollbar{display:none}
+.nav-ul{display:flex;list-style:none;white-space:nowrap}
+.nav-ul a{display:block;padding:.85rem .92rem;font-family:var(--fb);font-size:.6rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-m);text-decoration:none;border-bottom:2px solid transparent;transition:all .3s ease}
+.nav-ul a:hover{color:var(--teal);border-bottom-color:var(--teal)}
 
-  /* ─── DOT GRID BACKGROUND ─── */
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: radial-gradient(circle, rgba(196,164,90,.18) 1px, transparent 1px);
-    background-size: 28px 28px;
-    pointer-events: none;
-    z-index: 0;
-  }
+.main{max-width:870px;margin:0 auto;padding:0 2rem 6rem}
+.sc{padding-top:4.5rem}
+.sc-tag{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--fb);font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.7rem;color:var(--bronze)}
+.sc-tag .n{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:.54rem;font-weight:700;letter-spacing:0;color:var(--ivory);background:var(--teal)}
+.sc h2{font-family:var(--fd);font-size:clamp(1.7rem,3.2vw,2.4rem);font-weight:400;color:var(--ink);line-height:1.22;margin-bottom:.3rem}
+.sc-sub{font-family:var(--fd);font-size:1.02rem;color:var(--ink-m);font-style:italic;margin-bottom:2rem;line-height:1.6}
+.sc-intro{font-size:.95rem;color:var(--ink-s);line-height:1.85;margin-bottom:2rem;max-width:730px}
 
-  /* ─── AMBIENT GLOW ─── */
-  body::after {
-    content: '';
-    position: fixed;
-    top: -20%; left: 50%; transform: translateX(-50%);
-    width: 800px; height: 600px;
-    background: radial-gradient(ellipse, rgba(196,164,90,.06) 0%, transparent 65%);
-    pointer-events: none;
-    z-index: 0;
-  }
+.gr{margin-bottom:2.3rem}
+.gr-t{font-family:var(--fb);font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-s);margin-bottom:.8rem;padding-bottom:.4rem;border-bottom:1px solid var(--brd)}
+.cd{background:var(--bg-card);border:1px solid var(--brd-l);border-radius:var(--r);padding:1.1rem 1.35rem;margin-bottom:.46rem;transition:all .25s ease}
+.cd:hover{border-color:var(--brd);box-shadow:0 4px 16px rgba(22,24,25,.05);transform:translateY(-1px)}
+.cd .en{font-family:var(--fd);font-size:1.1rem;color:var(--ink);line-height:1.48;margin-bottom:.1rem}
+.cd .pt{font-family:var(--fb);font-size:.82rem;color:var(--ink-m);line-height:1.5}
 
-  /* ─── FLOATING GEO ELEMENTS ─── */
-  .geo {
-    position: fixed;
-    pointer-events: none;
-    z-index: 0;
-    animation: geoFloat 8s ease-in-out infinite;
-  }
-  .geo-ring {
-    width: 120px; height: 120px;
-    border: 1px solid rgba(196,164,90,.12);
-    border-radius: 50%;
-    top: 8%; right: 6%;
-    animation-duration: 11s;
-  }
-  .geo-ring-2 {
-    width: 60px; height: 60px;
-    border: 1px solid rgba(196,164,90,.18);
-    border-radius: 50%;
-    bottom: 14%; left: 4%;
-    animation-duration: 9s;
-    animation-delay: -3s;
-  }
-  .geo-diamond {
-    width: 18px; height: 18px;
-    border: 1px solid rgba(196,164,90,.3);
-    transform: rotate(45deg);
-    top: 50%; right: 4%;
-    animation-duration: 13s;
-    animation-delay: -5s;
-  }
-  .geo-line {
-    width: 1px; height: 80px;
-    background: linear-gradient(to bottom, transparent, rgba(196,164,90,.25), transparent);
-    top: 20%; left: 8%;
-    animation-duration: 7s;
-    animation-delay: -2s;
-  }
-  @keyframes geoFloat {
-    0%, 100% { transform: translateY(0); }
-    50%       { transform: translateY(-14px); }
-  }
-  .geo-diamond { animation: geoPulse 13s ease-in-out infinite; }
-  @keyframes geoPulse {
-    0%, 100% { transform: rotate(45deg) scale(1);   opacity: .3; }
-    50%       { transform: rotate(45deg) scale(1.3); opacity: .7; }
-  }
+.nt{margin-top:.45rem;font-family:var(--fb);font-size:.71rem;padding:.42rem .72rem;border-radius:6px;line-height:1.55;border-left:3px solid}
+.nt.teal{color:var(--teal-d);background:var(--teal-bg);border-color:var(--teal)}
+.nt.bronze{color:var(--bronze-d);background:var(--bronze-bg);border-color:var(--bronze)}
+.nt.sand{color:var(--warm);background:var(--sand-bg);border-color:var(--sand)}
+.nt.clay{color:var(--clay);background:var(--clay-bg);border-color:var(--clay)}
 
-  /* ─── LAYOUT ─── */
-  .wrapper {
-    position: relative; z-index: 1;
-    width: 100vw; height: 100vh;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    padding: 0 0 0 0;
-  }
+.vg{display:grid;grid-template-columns:repeat(auto-fill,minmax(225px,1fr));gap:.4rem;margin:1.4rem 0 2rem}
+.vi{background:var(--bg-card);border:1px solid var(--brd-l);border-radius:8px;padding:.7rem .92rem;transition:all .2s ease}
+.vi:hover{border-color:var(--brd);box-shadow:0 2px 10px rgba(22,24,25,.04)}
+.vi .en{font-family:var(--fd);font-size:.92rem;color:var(--ink)}
+.vi .pt{font-family:var(--fb);font-size:.73rem;color:var(--ink-m)}
 
-  /* ─── HEADER ─── */
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 24px 48px 20px;
-    border-bottom: 1px solid rgba(196,164,90,.12);
-  }
-  .brand {
-    display: flex; flex-direction: column; gap: 2px;
-  }
-  .brand-overline {
-    font-family: 'Raleway', sans-serif;
-    font-size: 9px;
-    font-weight: 500;
-    letter-spacing: .25em;
-    text-transform: uppercase;
-    color: var(--gold);
-  }
-  .brand-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 26px;
-    font-weight: 400;
-    letter-spacing: .08em;
-    color: var(--cream);
-    line-height: 1;
-  }
-  .brand-name em {
-    font-style: italic;
-    color: var(--gold);
-  }
+.dlg{background:var(--bg-card);border:1px solid var(--brd);border-radius:12px;padding:1.6rem 1.8rem;margin:1.8rem 0 2.3rem;position:relative;overflow:hidden}
+.dlg::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--teal-d),var(--bronze),var(--teal-d))}
+.dlg-h{font-family:var(--fb);font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal-l);margin-bottom:.18rem}
+.dlg-ctx{font-family:var(--fb);font-size:.76rem;color:var(--ink-m);font-style:italic;margin-bottom:1.2rem}
+.ln{display:flex;gap:.8rem;margin-bottom:.76rem;align-items:flex-start}
+.av{flex-shrink:0;width:31px;height:31px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fb);font-size:.48rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;margin-top:2px}
+.av.you{background:var(--teal-bg);color:var(--teal);border:1.5px solid rgba(26,75,82,.14)}
+.av.them{background:var(--bronze-bg);color:var(--bronze-d);border:1.5px solid rgba(166,139,91,.15)}
+.bb{flex:1}.bb .en{font-family:var(--fd);font-size:.98rem;color:var(--ink);line-height:1.48}
+.bb .pt{font-family:var(--fb);font-size:.75rem;color:var(--ink-m);line-height:1.5;margin-top:.05rem}
 
-  .header-right {
-    text-align: right;
-    display: flex; flex-direction: column; gap: 4px;
-  }
-  .header-tag {
-    font-size: 9px;
-    letter-spacing: .2em;
-    text-transform: uppercase;
-    color: var(--gold);
-    font-weight: 500;
-  }
-  .header-score-label {
-    font-size: 11px;
-    letter-spacing: .12em;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-  .header-score-val {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 32px;
-    font-weight: 300;
-    color: var(--gold-light);
-    line-height: 1;
-    transition: all .2s;
-  }
+.bk{border-radius:12px;padding:1.5rem 1.6rem;margin:1.8rem 0;border:1px solid}
+.bk h4{font-family:var(--fb);font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.5rem}
+.bk p{font-size:.9rem;color:var(--ink-s);line-height:1.75}
+.bk.tip{background:linear-gradient(135deg,var(--bronze-bg),var(--bg));border-color:rgba(166,139,91,.14)}.bk.tip h4{color:var(--bronze-d)}
+.bk.cultural{background:linear-gradient(135deg,var(--teal-bg),var(--bg));border-color:rgba(26,75,82,.1)}.bk.cultural h4{color:var(--teal)}
+.bk.alert{background:linear-gradient(135deg,var(--clay-bg),var(--bg));border-color:rgba(154,117,104,.14)}.bk.alert h4{color:var(--clay)}
+.bk.note{background:linear-gradient(135deg,var(--sand-bg),var(--bg));border-color:rgba(184,173,154,.15)}.bk.note h4{color:var(--warm)}
+.bk.final{background:linear-gradient(135deg,var(--teal-bg),var(--bronze-bg));border-color:rgba(26,75,82,.12)}.bk.final h4{color:var(--teal)}
 
-  /* ─── MAIN ARENA ─── */
-  .arena {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    flex: 1;
-    overflow: hidden;
-  }
+.banner{background:linear-gradient(135deg,var(--teal-d) 0%,var(--teal) 50%,var(--teal-d) 100%);padding:2.6rem 2rem;text-align:center;margin-top:3.5rem}
+.banner h3{font-family:var(--fd);font-size:1.6rem;color:rgba(244,243,239,.7);margin-bottom:.3rem}
+.banner h3 em{font-style:italic;color:var(--bronze-l)}
+.banner p{font-family:var(--fb);font-size:.8rem;color:rgba(244,243,239,.25);max-width:440px;margin:0 auto;line-height:1.55}
 
-  #canvas-wrap {
-    position: relative;
-  }
+.sep{display:flex;align-items:center;justify-content:center;gap:1rem;padding:2.8rem 0 0}
+.sep::before,.sep::after{content:'';flex:1;max-width:100px;height:1px;background:var(--brd)}
+.sep .d{width:5px;height:5px;background:var(--teal);transform:rotate(45deg);opacity:.18}
 
-  canvas {
-    display: block;
-    border: 1px solid rgba(196,164,90,.2);
-    box-shadow:
-      0 0 60px rgba(196,164,90,.06),
-      inset 0 0 80px rgba(5,13,26,.6);
-    background: rgba(5,13,26,.55);
-    backdrop-filter: blur(2px);
-  }
+.footer{text-align:center;padding:4rem 2rem;border-top:1px solid var(--brd-l);margin-top:3rem}
+.footer-b{font-family:var(--fd);font-size:1.3rem;color:var(--ink);margin-bottom:.4rem}
+.footer-sub{font-family:var(--fd);font-size:1rem;color:var(--ink-m);font-style:italic;margin-bottom:1.5rem;line-height:1.6}
+.footer-t{font-family:var(--fb);font-size:.73rem;color:var(--ink-m)}
 
-  /* ─── WORD FLOATING LABELS (rendered on canvas overlay) ─── */
-  .word-label {
-    position: absolute;
-    font-family: 'Raleway', sans-serif;
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: .15em;
-    text-transform: uppercase;
-    color: var(--gold-light);
-    pointer-events: none;
-    transition: opacity .4s, transform .3s;
-    white-space: nowrap;
-    text-shadow: 0 0 12px rgba(196,164,90,.4);
-  }
-  .word-label.eaten {
-    animation: wordEaten .6s forwards;
-  }
-  @keyframes wordEaten {
-    0%   { opacity: 1; transform: scale(1.4);    color: #fff; }
-    100% { opacity: 0; transform: scale(2) translateY(-20px); }
-  }
-
-  /* ─── OVERLAY SCREENS ─── */
-  .overlay {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 20px;
-    background: rgba(5,13,26,.85);
-    backdrop-filter: blur(6px);
-    z-index: 10;
-    transition: opacity .5s;
-  }
-  .overlay.hidden { opacity: 0; pointer-events: none; }
-
-  .overlay-overline {
-    font-size: 9px;
-    letter-spacing: .3em;
-    text-transform: uppercase;
-    color: var(--gold);
-    font-weight: 500;
-  }
-  .overlay-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(36px, 5vw, 60px);
-    font-weight: 300;
-    color: var(--cream);
-    text-align: center;
-    line-height: 1.1;
-  }
-  .overlay-title em {
-    font-style: italic;
-    color: var(--gold);
-  }
-  .overlay-divider {
-    width: 60px; height: 1px;
-    background: var(--gold);
-    opacity: .5;
-  }
-  .overlay-sub {
-    font-size: 12px;
-    letter-spacing: .1em;
-    color: var(--muted);
-    text-align: center;
-    line-height: 1.8;
-  }
-  .overlay-score-display {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 64px;
-    font-weight: 300;
-    color: var(--gold-light);
-    line-height: 1;
-  }
-  .overlay-score-label {
-    font-size: 10px;
-    letter-spacing: .2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-top: -12px;
-  }
-
-  .btn-start {
-    margin-top: 8px;
-    padding: 14px 48px;
-    background: transparent;
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    font-family: 'Raleway', sans-serif;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: .25em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all .25s;
-    position: relative;
-    overflow: hidden;
-  }
-  .btn-start::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: var(--gold);
-    transform: translateX(-101%);
-    transition: transform .25s;
-    z-index: -1;
-  }
-  .btn-start:hover { color: var(--navy-deep); }
-  .btn-start:hover::before { transform: translateX(0); }
-
-  /* ─── GLOSSARY TICKER ─── */
-  .word-earned {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.8);
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-style: italic;
-    color: var(--gold-light);
-    text-align: center;
-    pointer-events: none;
-    z-index: 20;
-    opacity: 0;
-    text-shadow: 0 0 30px rgba(196,164,90,.6);
-  }
-  .word-earned.show {
-    animation: wordPop .9s forwards;
-  }
-  @keyframes wordPop {
-    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-    20%  { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
-    70%  { opacity: 1; transform: translate(-50%, -50%) scale(1);   }
-    100% { opacity: 0; transform: translate(-50%, -60%) scale(0.95); }
-  }
-
-  /* ─── GLOSSARY SIDEBAR ─── */
-  .glossary {
-    position: fixed;
-    right: 32px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    max-height: 60vh;
-    overflow: hidden;
-    z-index: 5;
-    width: 220px;
-  }
-  .glossary-title {
-    font-size: 8px;
-    letter-spacing: .25em;
-    text-transform: uppercase;
-    color: var(--gold);
-    font-weight: 500;
-    margin-bottom: 4px;
-    opacity: .7;
-  }
-  .glossary-entry {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    opacity: 0;
-    transform: translateX(20px);
-    animation: slideIn .4s forwards;
-    border-left: 1px solid rgba(196,164,90,.25);
-    padding-left: 10px;
-  }
-  @keyframes slideIn {
-    to { opacity: 1; transform: translateX(0); }
-  }
-  .glossary-word {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 14px;
-    color: var(--gold-light);
-    font-style: italic;
-  }
-  .glossary-pt {
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: .05em;
-  }
-
-  /* ─── FOOTER ─── */
-  footer {
-    border-top: 1px solid rgba(196,164,90,.1);
-    padding: 14px 48px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: linear-gradient(to right, rgba(196,164,90,.04), transparent);
-  }
-  .footer-controls {
-    display: flex; gap: 24px;
-  }
-  .key-hint {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 10px;
-    letter-spacing: .12em;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-  .key {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 22px; height: 22px;
-    border: 1px solid rgba(196,164,90,.3);
-    color: var(--gold);
-    font-size: 9px;
-    font-weight: 600;
-    border-radius: 3px;
-  }
-  .footer-level {
-    font-size: 10px;
-    letter-spacing: .15em;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-  .footer-level span {
-    color: var(--gold);
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 16px;
-    font-weight: 300;
-  }
-
-  /* score pulse */
-  @keyframes scorePulse {
-    0%,100% { transform: scale(1); }
-    50%      { transform: scale(1.15); color: #fff; }
-  }
-  .pulse { animation: scorePulse .3s ease; }
+@media(max-width:768px){.main{padding:0 1.2rem 4rem}.dlg{padding:1.3rem}.sc{padding-top:3.5rem}.vg{grid-template-columns:1fr}.nav-ul a{padding:.78rem .68rem;font-size:.56rem}}
+.fi{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}.fi.v{opacity:1;transform:translateY(0)}
 </style>
-</head>
-<body>
+<section class="hero">
+  <div class="hero-c">
+    <div class="hero-badge">Módulo Bônus Final — Encerramento</div>
+    <h1>The Confident<br><em>Traveler</em></h1>
+    <div class="hero-line"></div>
+    <p class="hero-sub">Tudo o que ficou de fora dos outros módulos — e que faz a diferença entre um turista e um viajante preparado.</p>
+    <div class="hero-scroll">Explore o módulo final<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"></path></svg></div>
+  </div>
+</section>
+<nav class="nav"><div class="nav-in"><ul class="nav-ul">
+  <li><a href="#s1">Números & Dinheiro</a></li>
+  <li><a href="#s2">Datas & Horas</a></li>
+  <li><a href="#s3">Ligações</a></li>
+  <li><a href="#s4">Emergências Gerais</a></li>
+  <li><a href="#s5">Small Talk</a></li>
+  <li><a href="#s6">Inteligência Cultural</a></li>
+  <li><a href="#s7">Tecnologia</a></li>
+  <li><a href="#s8">Clima & Tempo</a></li>
+  <li><a href="#s9">Falsos Cognatos</a></li>
+  <li><a href="#s10">Opiniões & Sentimentos</a></li>
+  <li><a href="#s11">Voltando para Casa</a></li>
+  <li><a href="#s12">Mindset Final</a></li>
+</ul></div></nav>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p><main class="main"><p></p>
+<!-- ███ 1 ███ -->
+<section class="sc" id="s1">
+  <div class="sc-tag"><span class="n">1</span> Numbers & Money</div>
+  <h2>Números, Preços e Dinheiro</h2>
+  <p class="sc-sub">Como dizer valores, entender preços e lidar com dinheiro sem hesitar.</p>
+  <p class="sc-intro">Parece básico, mas a forma como americanos falam números e preços é diferente. Hesitar na hora de entender "$14.50" ou "That'll be twenty-three fifty" pode travar uma interação inteira. Vamos resolver isso.</p>
 
-<!-- Floating geometric decorations -->
-<div class="geo geo-ring"></div>
-<div class="geo geo-ring-2"></div>
-<div class="geo geo-diamond"></div>
-<div class="geo geo-line"></div>
-
-<!-- Word earned toast -->
-<div class="word-earned" id="wordToast"></div>
-
-<!-- Glossary sidebar -->
-<div class="glossary" id="glossary">
-  <div class="glossary-title">Vocabulário adquirido</div>
-</div>
-
-<div class="wrapper">
-  <!-- HEADER -->
-  <header>
-    <div class="brand">
-      <div class="brand-overline">Instituto MD Talk</div>
-      <div class="brand-name">MD <em>Talk</em></div>
-    </div>
-    <div class="header-right">
-      <div class="header-tag">Sala de Espera</div>
-      <div class="header-score-label">Score</div>
-      <div class="header-score-val" id="scoreDisplay">0</div>
-    </div>
-  </header>
-
-  <!-- ARENA -->
-  <div class="arena" id="arena">
-    <div id="canvas-wrap">
-      <canvas id="game"></canvas>
-    </div>
-
-    <!-- START OVERLAY -->
-    <div class="overlay" id="overlayStart">
-      <div class="overlay-overline">Sala de Espera · MD Talk</div>
-      <div class="overlay-title">Enquanto você <em>aguarda</em>,<br>pratique Medical English</div>
-      <div class="overlay-divider"></div>
-      <div class="overlay-sub">
-        Guie a cobra pelo grid e colete<br>
-        termos clínicos em inglês<br>
-        <br>
-        <span style="color:var(--gold-pale); font-size:10px; letter-spacing:.15em">USE AS SETAS OU WASD PARA MOVER</span>
-      </div>
-      <button class="btn-start" id="btnStart">Iniciar</button>
-    </div>
-
-    <!-- GAME OVER OVERLAY -->
-    <div class="overlay hidden" id="overlayOver">
-      <div class="overlay-overline">Session Ended</div>
-      <div class="overlay-title"><em>Game</em> Over</div>
-      <div class="overlay-divider"></div>
-      <div class="overlay-score-display" id="finalScore">0</div>
-      <div class="overlay-score-label">termos coletados</div>
-      <div class="overlay-sub" id="lastWord"></div>
-      <button class="btn-start" id="btnRestart">Nova Sessão</button>
-    </div>
+  <div class="gr"><div class="gr-t">Como americanos dizem preços</div>
+    <div class="cd"><div class="en">"That's fourteen fifty." ($14.50)</div><div class="pt">São quatorze e cinquenta. — Eles eliminam "dollars and cents". "Fourteen fifty" = $14.50, não $1,450.</div><div class="nt teal">A regra: o primeiro número são os dólares, o segundo são os centavos. <strong>"Twenty-three fifty"</strong> = $23.50. <strong>"A hundred and fifty"</strong> = $150.00. O contexto resolve a ambiguidade.</div></div>
+    <div class="cd"><div class="en">"It's nine ninety-nine." ($9.99)</div><div class="pt">São nove e noventa e nove.</div></div>
+    <div class="cd"><div class="en">"That'll be two hundred even."</div><div class="pt">Dá duzentos exatos. — <strong>"Even"</strong> = valor redondo, sem centavos.</div></div>
+    <div class="cd"><div class="en">"It comes out to about a grand."</div><div class="pt">Dá mais ou menos mil dólares. — <strong>"A grand"</strong> = $1,000 (informal, muito usado).</div></div>
   </div>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-controls">
-      <div class="key-hint"><div class="key">↑</div><div class="key">↓</div><div class="key">←</div><div class="key">→</div> mover</div>
-      <div class="key-hint"><div class="key" style="width:32px">P</div> pausar</div>
-    </div>
-    <div class="footer-level">Nível <span id="levelDisplay">I</span></div>
-  </footer>
-</div>
+  <div class="gr"><div class="gr-t">Números grandes e endereços</div>
+    <div class="cd"><div class="en">"My room is eight fourteen." (Room 814)</div><div class="pt">Meu quarto é o oito-catorze. — Números de quarto e endereços são falados em blocos: 814 = "eight fourteen", não "eight hundred and fourteen".</div></div>
+    <div class="cd"><div class="en">"The address is twelve twenty-five Main Street." (1225 Main St)</div><div class="pt">O endereço é doze-vinte e cinco Main Street.</div></div>
+    <div class="cd"><div class="en">"My phone number is four-oh-seven, five-five-five, twelve thirty-four."</div><div class="pt">(407) 555-1234. — <strong>"Oh"</strong> = zero em números de telefone. Nunca diga "zero" — diga "oh".</div></div>
+  </div>
 
-<script>
-// ─── MEDICAL VOCABULARY ───────────────────────────────────────────────────────
-const VOCAB = [
-  { en: 'dyspnea',        pt: 'dispneia' },
-  { en: 'tachycardia',    pt: 'taquicardia' },
-  { en: 'bradycardia',    pt: 'bradicardia' },
-  { en: 'hypertension',   pt: 'hipertensão' },
-  { en: 'hypoxia',        pt: 'hipóxia' },
-  { en: 'edema',          pt: 'edema' },
-  { en: 'syncope',        pt: 'síncope' },
-  { en: 'auscultation',   pt: 'ausculta' },
-  { en: 'pallor',         pt: 'palidez' },
-  { en: 'cyanosis',       pt: 'cianose' },
-  { en: 'hemoptysis',     pt: 'hemoptise' },
-  { en: 'dysphagia',      pt: 'disfagia' },
-  { en: 'paraesthesia',   pt: 'parestesia' },
-  { en: 'vertigo',        pt: 'vertigem' },
-  { en: 'prognosis',      pt: 'prognóstico' },
-  { en: 'anamnesis',      pt: 'anamnese' },
-  { en: 'triage',         pt: 'triagem' },
-  { en: 'palpation',      pt: 'palpação' },
-  { en: 'percussion',     pt: 'percussão' },
-  { en: 'jaundice',       pt: 'icterícia' },
-  { en: 'diuresis',       pt: 'diurese' },
-  { en: 'embolism',       pt: 'embolia' },
-  { en: 'ischemia',       pt: 'isquemia' },
-  { en: 'infarction',     pt: 'infarto' },
-  { en: 'necrosis',       pt: 'necrose' },
-  { en: 'fibrosis',       pt: 'fibrose' },
-  { en: 'stenosis',       pt: 'estenose' },
-  { en: 'thrombosis',     pt: 'trombose' },
-  { en: 'septicemia',     pt: 'septicemia' },
-  { en: 'hemostasis',     pt: 'hemostasia' },
-  { en: 'diaphoresis',    pt: 'diaforese' },
-  { en: 'epistaxis',      pt: 'epistaxe' },
-  { en: 'oliguria',       pt: 'oligúria' },
-  { en: 'anuria',         pt: 'anúria' },
-  { en: 'hematuria',      pt: 'hematúria' },
-  { en: 'cachexia',       pt: 'caquexia' },
-  { en: 'ascites',        pt: 'ascite' },
-  { en: 'atelectasis',    pt: 'atelectasia' },
-  { en: 'pneumothorax',   pt: 'pneumotórax' },
-  { en: 'emphysema',      pt: 'enfisema' },
-];
+  <div class="gr"><div class="gr-t">Lidando com dinheiro na prática</div>
+    <div class="cd"><div class="en">"Do you have change for a twenty?"</div><div class="pt">Tem troco para uma nota de vinte?</div></div>
+    <div class="cd"><div class="en">"Can I break a hundred?"</div><div class="pt">Posso trocar uma nota de cem?</div></div>
+    <div class="cd"><div class="en">"What's the exchange rate for Brazilian reais?"</div><div class="pt">Qual é a taxa de câmbio para reais brasileiros?</div></div>
+    <div class="cd"><div class="en">"I was shortchanged. I gave you a fifty, not a twenty."</div><div class="pt">Recebi troco a menos. Dei uma de cinquenta, não de vinte.</div></div>
+  </div>
 
-const ROMAN = ['I','II','III','IV','V','VI','VII'];
+  <div class="vg">
+    <div class="vi"><div class="en">penny (1¢) / nickel (5¢)</div><div class="pt">moeda de 1 centavo / 5 centavos</div></div>
+    <div class="vi"><div class="en">dime (10¢) / quarter (25¢)</div><div class="pt">moeda de 10 centavos / 25 centavos</div></div>
+    <div class="vi"><div class="en">a buck / bucks</div><div class="pt">um dólar / dólares (gíria)</div></div>
+    <div class="vi"><div class="en">a grand</div><div class="pt">mil dólares (gíria)</div></div>
+    <div class="vi"><div class="en">cash / card / contactless</div><div class="pt">dinheiro / cartão / por aproximação</div></div>
+    <div class="vi"><div class="en">ATM / cash machine</div><div class="pt">caixa eletrônico</div></div>
+  </div>
+</section>
+<div class="sep"><span class="d"></span></div>
+<!-- ███ 2 ███ -->
+<section class="sc" id="s2">
+  <div class="sc-tag"><span class="n">2</span> Dates & Time</div>
+  <h2>Datas, Horas e Agendamentos</h2>
+  <p class="sc-sub">O formato americano é diferente — e errar pode custar uma reserva ou um voo.</p>
 
-// ─── CANVAS SETUP ────────────────────────────────────────────────────────────
-const canvas = document.getElementById('game');
-const ctx    = canvas.getContext('2d');
-const arena  = document.getElementById('arena');
+  <div class="gr"><div class="gr-t">Datas — a armadilha do formato</div>
+    <div class="cd"><div class="en">"03/12" nos EUA = March 12th (12 de março)</div><div class="pt">Nos EUA, o formato é <strong>mês/dia/ano</strong> (MM/DD/YYYY). No Brasil e na Europa, é dia/mês/ano. 03/12 para um americano é 12 de março, não 3 de dezembro.</div><div class="nt clay">Essa confusão é responsável por reservas erradas, voos perdidos e check-ins no dia errado. <strong>Sempre escreva o mês por extenso</strong> quando houver risco de ambiguidade: "March 12" em vez de "03/12".</div></div>
+    <div class="cd"><div class="en">"My flight is on January 5th, 2026."</div><div class="pt">Meu voo é no dia 5 de janeiro de 2026. — Para datas, use: <strong>mês + número ordinal + ano</strong>.</div></div>
+    <div class="cd"><div class="en">"What's today's date?" → "It's the fifteenth." / "It's March fifteenth."</div><div class="pt">Que dia é hoje? → É dia quinze. / É 15 de março.</div></div>
+  </div>
 
-let COLS, ROWS, CELL, W, H;
+  <div class="gr"><div class="gr-t">Horas — 12h, não 24h</div>
+    <div class="cd"><div class="en">"The meeting is at 2 PM." (não "14 hours")</div><div class="pt">A reunião é às 14h. — Nos EUA e UK, usam formato 12h com AM/PM. Nunca diga "14 hours" — diga "2 PM".</div><div class="nt teal"><strong>AM</strong> = meia-noite até meio-dia. <strong>PM</strong> = meio-dia até meia-noite. <strong>"Noon"</strong> = meio-dia. <strong>"Midnight"</strong> = meia-noite.</div></div>
+    <div class="cd"><div class="en">"It's quarter past three." / "It's half past seven." / "It's ten to nine."</div><div class="pt">São três e quinze. / São sete e meia. / Faltam dez para as nove.</div></div>
+    <div class="cd"><div class="en">"What time zone are you in?" / "What's the time difference between here and Brazil?"</div><div class="pt">Em que fuso horário você está? / Qual a diferença de fuso entre aqui e o Brasil?</div></div>
+  </div>
 
-function resize() {
-  const pad  = 32;
-  const aw   = arena.clientWidth  - pad * 2;
-  const ah   = arena.clientHeight - pad * 2;
-  CELL = window.innerWidth < 700 ? 36 : 44;
-  COLS = Math.floor(aw / CELL);
-  ROWS = Math.floor(ah / CELL);
-  // keep odd for centering
-  if (COLS % 2 === 0) COLS--;
-  if (ROWS % 2 === 0) ROWS--;
-  COLS = Math.max(11, COLS);
-  ROWS = Math.max(9,  ROWS);
-  W = COLS * CELL;
-  H = ROWS * CELL;
-  canvas.width  = W;
-  canvas.height = H;
-}
-resize();
+  <div class="bk tip">
+    <h4>Dica de Ouro</h4>
+    <p>Ao fazer agendamentos por telefone, <strong>sempre confirme repetindo</strong>: "Just to confirm — that's Tuesday, March 15th, at 2 PM?" (Só para confirmar — é terça, 15 de março, às 14h?). Isso evita erros de data e horário, especialmente com fuso horário.</p>
+  </div>
+</section>
+<div class="sep"><span class="d"></span></div>
+<!-- ███ 3 ███ -->
+<section class="sc" id="s3">
+  <div class="sc-tag"><span class="n">3</span> Phone Calls</div>
+  <h2>Fazendo Ligações em Inglês</h2>
+  <p class="sc-sub">Ligar para hotel, restaurante, companhia aérea ou emergência — sem o apoio da linguagem corporal.</p>
+  <p class="sc-intro">Falar inglês ao telefone é significativamente mais difícil do que pessoalmente — não há linguagem corporal, o áudio pode ser ruim, e a velocidade do nativo parece dobrar. Essas frases vão te preparar.</p>
 
-// ─── GAME STATE ──────────────────────────────────────────────────────────────
-let snake, dir, nextDir, food, score, level, speed, paused, running, intervalId;
-let collected = [];
-let foodItem  = null;
+  <div class="gr"><div class="gr-t">Abrindo a ligação</div>
+    <div class="cd"><div class="en">"Hi, I'm calling to make a reservation / to inquire about / to confirm..."</div><div class="pt">Oi, estou ligando para fazer uma reserva / para perguntar sobre / para confirmar...</div></div>
+    <div class="cd"><div class="en">"My name is [nome] and my reservation number is [número]."</div><div class="pt">Meu nome é [nome] e meu número de reserva é [número].</div></div>
+    <div class="cd"><div class="en">"Could I speak with someone in [department]?"</div><div class="pt">Poderia falar com alguém do [departamento]?</div></div>
+  </div>
 
-function initGame() {
-  resize();
-  const cx = Math.floor(COLS / 2);
-  const cy = Math.floor(ROWS / 2);
-  snake   = [{ x: cx, y: cy }, { x: cx - 1, y: cy }, { x: cx - 2, y: cy }];
-  dir     = { x: 1, y: 0 };
-  nextDir = { x: 1, y: 0 };
-  score   = 0;
-  level   = 1;
-  speed   = 200;
-  paused  = false;
-  running = true;
-  collected = [];
-  foodItem  = null;
-  updateScoreDisplay();
-  updateLevelDisplay();
-  placeFood();
-  clearInterval(intervalId);
-  intervalId = setInterval(tick, speed);
-}
+  <div class="gr"><div class="gr-t">Quando não entende</div>
+    <div class="cd"><div class="en">"I'm sorry, the line is a bit unclear. Could you repeat that?"</div><div class="pt">Desculpe, a linha está um pouco ruim. Poderia repetir?</div></div>
+    <div class="cd"><div class="en">"Could you spell that for me, please?"</div><div class="pt">Poderia soletrar para mim, por favor?</div></div>
+    <div class="cd"><div class="en">"Could you speak a little slower? I'm not a native speaker."</div><div class="pt">Poderia falar um pouco mais devagar? Não sou falante nativo.</div></div>
+    <div class="cd"><div class="en">"Let me read that back to you to make sure I got it right."</div><div class="pt">Deixe eu repetir para confirmar que entendi certo.</div></div>
+  </div>
 
-// ─── FOOD WORDS ──────────────────────────────────────────────────────────────
-function placeFood() {
-  const remaining = VOCAB.filter(v => !collected.find(c => c.en === v.en));
-  const pool = remaining.length > 0 ? remaining : VOCAB;
-  const item = pool[Math.floor(Math.random() * pool.length)];
-  let x, y, safe;
-  let tries = 0;
-  do {
-    x = 1 + Math.floor(Math.random() * (COLS - 2));
-    y = 1 + Math.floor(Math.random() * (ROWS - 2));
-    safe = !snake.some(s => s.x === x && s.y === y);
-    tries++;
-  } while (!safe && tries < 200);
-  foodItem = { x, y, ...item };
-}
+  <div class="gr"><div class="gr-t">Menus automáticos (IVR)</div>
+    <div class="cd"><div class="en">"For English, press 1." / "For reservations, press 2."</div><div class="pt">"Para inglês, pressione 1." / "Para reservas, pressione 2."</div></div>
+    <div class="cd"><div class="en">"To speak with a representative, press 0 or say 'agent'."</div><div class="pt">"Para falar com um atendente, pressione 0 ou diga 'agent'."</div><div class="nt bronze">Na maioria dos sistemas americanos, pressionar <strong>0 repetidamente</strong> ou dizer <strong>"representative"</strong> / <strong>"agent"</strong> te leva a um humano mais rápido.</div></div>
+  </div>
 
-// ─── TICK ────────────────────────────────────────────────────────────────────
-function tick() {
-  if (!running || paused) return;
-  dir = { ...nextDir };
+  <div class="gr"><div class="gr-t">Encerrando a ligação</div>
+    <div class="cd"><div class="en">"Thank you for your help. Have a good day."</div><div class="pt">Obrigado pela ajuda. Tenha um bom dia.</div></div>
+    <div class="cd"><div class="en">"Could you email me a confirmation of what we just discussed?"</div><div class="pt">Poderia me enviar por e-mail uma confirmação do que acabamos de discutir?</div></div>
+  </div>
+</section>
+<div class="sep"><span class="d"></span></div>
+<!-- ███ 4 ███ -->
+<section class="sc" id="s4">
+  <div class="sc-tag"><span class="n">4</span> General Emergencies</div>
+  <h2>Emergências Além da Saúde</h2>
+  <p class="sc-sub">Passaporte perdido, roubo, problemas legais — o que fazer e como falar.</p>
 
-  const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+  <div class="gr"><div class="gr-t">Passaporte perdido ou roubado</div>
+    <div class="cd"><div class="en">"I lost my passport." / "My passport was stolen."</div><div class="pt">Perdi meu passaporte. / Meu passaporte foi roubado.</div></div>
+    <div class="cd"><div class="en">"Where is the nearest Brazilian consulate / embassy?"</div><div class="pt">Onde fica o consulado / embaixada do Brasil mais próximo?</div></div>
+    <div class="cd"><div class="en">"I need to apply for an emergency travel document."</div><div class="pt">Preciso solicitar um documento de viagem emergencial.</div></div>
+    <div class="cd"><div class="en">"I need a police report for my insurance claim."</div><div class="pt">Preciso de um boletim de ocorrência para meu pedido de seguro.</div></div>
+  </div>
 
-  // wall collision
-  if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) {
-    gameOver(); return;
-  }
-  // self collision
-  if (snake.some(s => s.x === head.x && s.y === head.y)) {
-    gameOver(); return;
-  }
+  <div class="gr"><div class="gr-t">Roubo e furto</div>
+    <div class="cd"><div class="en">"I've been robbed. Someone stole my wallet / phone / bag."</div><div class="pt">Fui roubado(a). Alguém roubou minha carteira / celular / bolsa.</div></div>
+    <div class="cd"><div class="en">"I need to file a police report."</div><div class="pt">Preciso registrar um boletim de ocorrência.</div></div>
+    <div class="cd"><div class="en">"I need to cancel my credit cards. Can I use your phone?"</div><div class="pt">Preciso cancelar meus cartões de crédito. Posso usar seu telefone?</div></div>
+    <div class="cd"><div class="en">"Where is the nearest police station?"</div><div class="pt">Onde fica a delegacia mais próxima?</div></div>
+  </div>
 
-  snake.unshift(head);
+  <div class="gr"><div class="gr-t">Outras emergências</div>
+    <div class="cd"><div class="en">"I'm lost and my phone is dead. Can you help me find [hotel / address]?"</div><div class="pt">Estou perdido(a) e meu celular descarregou. Pode me ajudar a encontrar [hotel / endereço]?</div></div>
+    <div class="cd"><div class="en">"I missed my flight. What are my options?"</div><div class="pt">Perdi meu voo. Quais são minhas opções?</div></div>
+    <div class="cd"><div class="en">"My travel insurance company's number is [number]. Can you help me contact them?"</div><div class="pt">O número da minha seguradora é [número]. Pode me ajudar a contactá-los?</div></div>
+  </div>
 
-  if (foodItem && head.x === foodItem.x && head.y === foodItem.y) {
-    eatFood();
-  } else {
-    snake.pop();
-  }
+  <div class="bk alert">
+    <h4>Antes de Viajar — Salve no Celular</h4>
+    <p>Salve esses contatos <strong>offline</strong> no celular (não dependa de internet): número do consulado/embaixada do Brasil no destino, número da seguradora de viagem, número de emergência de cada cartão de crédito, cópia digital do passaporte e da passagem, e o endereço do hotel. Se perder tudo, esses dados salvam a viagem.</p>
+  </div>
+</section>
+<div class="sep"><span class="d"></span></div>
+<!-- ███ 5 ███ -->
+<section class="sc" id="s5">
+  <div class="sc-tag"><span class="n">5</span> Small Talk</div>
+  <h2>Small Talk — A Arte da Conversa Leve</h2>
+  <p class="sc-sub">Como fazer amigos, puxar papo e não deixar o silêncio ficar estranho.</p>
+  <p class="sc-intro">Small talk é uma habilidade social essencial no mundo anglófono. Americanos fazem small talk com estranhos o tempo todo — no elevador, na fila, no Uber. Não é superficialidade — é código social. Dominar isso muda a experiência inteira da viagem.</p>
 
-  draw();
-}
+  <div class="gr"><div class="gr-t">Puxando conversa com estranhos</div>
+    <div class="cd"><div class="en">"Are you from around here?"</div><div class="pt">Você é daqui?</div></div>
+    <div class="cd"><div class="en">"This is my first time in [city]. Any recommendations?"</div><div class="pt">É minha primeira vez em [cidade]. Alguma recomendação?</div></div>
+    <div class="cd"><div class="en">"I love your [bag / jacket / shoes]. Where did you get it?"</div><div class="pt">Adorei sua [bolsa / jaqueta / sapato]. Onde comprou?</div><div class="nt bronze">Elogiar algo que a pessoa está vestindo é uma das formas mais naturais de puxar conversa nos EUA. É considerado simpático, não invasivo.</div></div>
+    <div class="cd"><div class="en">"What brings you to [city / place]?"</div><div class="pt">O que te traz a [cidade / lugar]?</div></div>
+    <div class="cd"><div class="en">"Have you tried the food here? It's amazing."</div><div class="pt">Você já provou a comida daqui? É incrível.</div></div>
+  </div>
 
-function eatFood() {
-  score++;
-  collected.unshift({ en: foodItem.en, pt: foodItem.pt });
-  if (collected.length > 8) collected = collected.slice(0, 8);
-  showWordToast(foodItem);
-  updateGlossary();
-  updateScoreDisplay();
+  <div class="gr"><div class="gr-t">Temas seguros para small talk</div>
+    <div class="cd"><div class="en">"Where are you from?" / "How long have you been here?"</div><div class="pt">De onde você é? / Há quanto tempo está aqui?</div></div>
+    <div class="cd"><div class="en">"What do you do?" (profissão — pergunta padrão nos EUA)</div><div class="pt">O que você faz? — Essa pergunta é absolutamente normal e esperada nos EUA. Não é invasiva.</div></div>
+    <div class="cd"><div class="en">"Have you traveled much?" / "What's your favorite place you've been to?"</div><div class="pt">Você já viajou bastante? / Qual seu lugar favorito que já visitou?</div></div>
+    <div class="cd"><div class="en">"The weather's been great, hasn't it?"</div><div class="pt">O tempo tem estado ótimo, né?</div></div>
+  </div>
 
-  // level up every 5 words
-  const newLevel = Math.floor(score / 5) + 1;
-  if (newLevel !== level) {
-    level = Math.min(newLevel, 7);
-    speed = Math.max(80, 200 - (level - 1) * 18);
-    clearInterval(intervalId);
-    intervalId = setInterval(tick, speed);
-    updateLevelDisplay();
-  }
-  placeFood();
-}
+  <div class="bk cultural">
+    <h4>Temas a Evitar</h4>
+    <p>Na maioria dos países anglófonos, evite em small talk com estranhos: <strong>política</strong> (especialmente nos EUA), <strong>religião</strong>, <strong>salário / quanto ganha</strong>, <strong>idade</strong> (especialmente de mulheres), e <strong>peso / aparência física</strong>. Esses temas são considerados íntimos demais para conversa casual. Na dúvida, fique com: viagens, comida, clima, profissão e cultura local.</p>
+  </div>
+</section>
+<div class="sep"><span class="d"></span></div>
+<!-- ███ 6 ███ -->
+<section class="sc" id="s6">
+  <div class="sc-tag"><span class="n">6</span> Cultural Intelligence</div>
+  <h2>Inteligência Cultural — O Que Não Fazer</h2>
+  <p class="sc-sub">Os erros que ninguém te conta — e que podem arruinar uma interação.</p>
 
-function gameOver() {
-  running = false;
-  clearInterval(intervalId);
-  draw(); // draw final state
-  setTimeout(() => showOverlay('over'), 600);
-}
+  <div class="gr"><div class="gr-t">EUA</div>
+    <div class="cd"><div class="en">Never skip the tip at restaurants.</div><div class="pt">Nunca deixe de dar gorjeta em restaurantes. É praticamente obrigatório (18–20%).</div></div>
+    <div class="cd"><div class="en">Respect personal space — about an arm's length.</div><div class="pt">Respeite o espaço pessoal — cerca de um braço de distância. Brasileiros tendem a ficar mais perto do que americanos esperam.</div></div>
+    <div class="cd"><div class="en">Don't cut in line. Ever.</div><div class="pt">Nunca fure a fila. Americanos levam filas muito a sério — é considerado extremamente rude.</div></div>
+    <div class="cd"><div class="en">Don't touch people you just met.</div><div class="pt">Não toque em pessoas que acabou de conhecer. Nada de beijo no rosto ou abraço — um aperto de mão ou aceno é o padrão.</div></div>
+  </div>
 
-// ─── DRAWING ─────────────────────────────────────────────────────────────────
-function draw() {
-  ctx.clearRect(0, 0, W, H);
+  <div class="gr"><div class="gr-t">Reino Unido</div>
+    <div class="cd"><div class="en">Queueing is sacred. Always wait your turn.</div><div class="pt">A fila é sagrada. Sempre espere sua vez.</div></div>
+    <div class="cd"><div class="en">"Sorry" is used constantly — even when it's not your fault.</div><div class="pt">"Sorry" é usado o tempo todo — mesmo quando não é sua culpa. É educação, não fraqueza.</div></div>
+    <div class="cd"><div class="en">Don't be loud in public spaces.</div><div class="pt">Não fale alto em espaços públicos. Tom de voz moderado é valorizado.</div></div>
+  </div>
 
-  // subtle grid lines
-  ctx.strokeStyle = 'rgba(196,164,90,.04)';
-  ctx.lineWidth = 1;
-  for (let c = 0; c <= COLS; c++) {
-    ctx.beginPath(); ctx.moveTo(c * CELL, 0); ctx.lineTo(c * CELL, H); ctx.stroke();
-  }
-  for (let r = 0; r <= ROWS; r++) {
-    ctx.beginPath(); ctx.moveTo(0, r * CELL); ctx.lineTo(W, r * CELL); ctx.stroke();
-  }
+  <div class="gr"><div class="gr-t">Japão</div>
+    <div class="cd"><div class="en">Never tip. It's considered rude.</div><div class="pt">Nunca dê gorjeta. É considerado rude.</div></div>
+    <div class="cd"><div class="en">Remove your shoes when entering homes and some restaurants.</div><div class="pt">Tire os sapatos ao entrar em casas e alguns restaurantes.</div></div>
+    <div class="cd"><div class="en">Don't eat or drink while walking.</div><div class="pt">Não coma nem beba enquanto caminha. É considerado falta de educação.</div></div>
+  </div>
 
-  // food word
-  if (foodItem) drawFoodWord(foodItem);
+  <div class="gr"><div class="gr-t">Europa em geral</div>
+    <div class="cd"><div class="en">Greet in the local language first, then switch to English.</div><div class="pt">Cumprimente no idioma local primeiro, depois mude para inglês. Um "Bonjour" antes de falar inglês em Paris faz toda a diferença.</div></div>
+    <div class="cd"><div class="en">Lunch is often the main meal, and dinner is later (8–10 PM in Southern Europe).</div><div class="pt">O almoço é frequentemente a refeição principal, e o jantar é mais tarde (20h–22h no Sul da Europa).</div></div>
+    <div class="cd"><div class="en">Don't assume everyone speaks English — ask first.</div><div class="pt">Não assuma que todos falam inglês — pergunte primeiro: <strong>"Do you speak English?"</strong></div></div>
+  </div>
+</section>
+<div class="sep"><span class="d"></span></div>
+<!-- ███ 7 ███ -->
+<section class="sc" id="s7">
+  <div class="sc-tag"><span class="n">7</span> Technology</div>
+  <h2>Tecnologia, Conectividade e Apps</h2>
+  <p class="sc-sub">SIM card, Wi-Fi, adaptadores e os apps que salvam viagens.</p>
 
-  // snake
-  drawSnake();
-}
+  <div class="gr"><div class="gr-t">Conectividade</div>
+    <div class="cd"><div class="en">"Where can I buy a prepaid SIM card / an eSIM?"</div><div class="pt">Onde posso comprar um chip pré-pago / um eSIM?</div></div>
+    <div class="cd"><div class="en">"Does this plan include data / international roaming?"</div><div class="pt">Esse plano inclui dados / roaming internacional?</div></div>
+    <div class="cd"><div class="en">"What's the Wi-Fi password?" / "Is the Wi-Fi free?"</div><div class="pt">Qual é a senha do Wi-Fi? / O Wi-Fi é gratuito?</div></div>
+    <div class="cd"><div class="en">"My phone isn't getting any signal here."</div><div class="pt">Meu celular não está pegando sinal aqui.</div></div>
+    <div class="cd"><div class="en">"Is there somewhere I can charge my phone?"</div><div class="pt">Tem algum lugar onde posso carregar meu celular?</div></div>
+    <div class="cd"><div class="en">"Do I need a plug adapter for this country?"</div><div class="pt">Preciso de um adaptador de tomada para este país?</div></div>
+  </div>
 
-function drawSnake() {
-  const len = snake.length;
-  snake.forEach((seg, i) => {
-    const t = i / len; // 0 = head, 1 = tail
-    const x = seg.x * CELL;
-    const y = seg.y * CELL;
-    const pad = 3 + t * 4;
-    const r   = (CELL / 2 - pad);
-    const alpha = 1 - t * 0.6;
+  <div class="bk tip">
+    <h4>Apps Essenciais para o Viajante</h4>
+    <p><strong>Google Maps</strong> (baixe mapas offline antes da viagem), <strong>Google Translate</strong> (funciona offline com idiomas baixados), <strong>Uber / Lyft</strong> (transporte), <strong>XE Currency</strong> (conversor de moeda em tempo real), <strong>Airalo ou Holafly</strong> (eSIM internacional — sem precisar trocar chip), <strong>TripIt</strong> (organizador de itinerário). Baixe e configure tudo <strong>antes de embarcar</strong>.</p>
+  </div>
+</section>
+<div class="sep"><span class="d"></span></div>
+<!-- ███ 8 ███ -->
+<section class="sc" id="s8">
+  <div class="sc-tag"><span class="n">8</span> Weather</div>
+  <h2>Falando Sobre o Clima</h2>
+  <p class="sc-sub">O assunto mais universal do mundo — e perfeito para small talk.</p>
 
-    if (i === 0) {
-      // head — gold with glow
-      ctx.save();
-      ctx.shadowColor  = 'rgba(196,164,90,.7)';
-      ctx.shadowBlur   = 18;
-      ctx.fillStyle    = '#C4A45A';
-      roundRect(ctx, x + 3, y + 3, CELL - 6, CELL - 6, 6);
-      ctx.fill();
-      ctx.restore();
+  <div class="gr"><div class="gr-t">Frases sobre clima</div>
+    <div class="cd"><div class="en">"What's the weather like today?" / "What's the forecast for the weekend?"</div><div class="pt">Como está o tempo hoje? / Qual a previsão para o fim de semana?</div></div>
+    <div class="cd"><div class="en">"It's beautiful out today." / "It's freezing!" / "It's boiling hot."</div><div class="pt">Está lindo lá fora hoje. / Está congelando! / Está fervendo de calor.</div></div>
+    <div class="cd"><div class="en">"Is it supposed to rain later?"</div><div class="pt">Vai chover mais tarde?</div></div>
+    <div class="cd"><div class="en">"I wasn't expecting it to be this cold. I didn't bring a jacket."</div><div class="pt">Não esperava estar tão frio. Não trouxe jaqueta.</div></div>
+  </div>
 
-      // eyes
-      const eyeSize = 3;
-      ctx.fillStyle = '#050D1A';
-      const ex1 = x + CELL/2 - 4, ey1 = y + CELL/2 - 4;
-      const ex2 = x + CELL/2 + 2, ey2 = y + CELL/2 - 4;
+  <div class="vg">
+    <div class="vi"><div class="en">sunny / clear</div><div class="pt">ensolarado / céu limpo</div></div>
+    <div class="vi"><div class="en">cloudy / overcast</div><div class="pt">nublado / encoberto</div></div>
+    <div class="vi"><div class="en">rainy / drizzling</div><div class="pt">chuvoso / garoando</div></div>
+    <div class="vi"><div class="en">windy / breezy</div><div class="pt">ventoso / com brisa</div></div>
+    <div class="vi"><div class="en">humid / muggy</div><div class="pt">úmido / abafado</div></div>
+    <div class="vi"><div class="en">chilly / freezing</div><div class="pt">friozinho / congelante</div></div>
+    <div class="vi"><div class="en">snowing / icy</div><div class="pt">nevando / gelado (com gelo)</div></div>
+    <div class="vi"><div class="en">heatwave / storm</div><div class="pt">onda de calor / tempestade</div></div>
+  </div>
 
-      if (dir.x === 1)  { drawEyes(x + CELL - 10, y + CELL/2 - 4, x + CELL - 10, y + CELL/2 + 2); }
-      else if (dir.x === -1) { drawEyes(x + 6, y + CELL/2 - 4, x + 6, y + CELL/2 + 2); }
-      else if (dir.y === -1) { drawEyes(x + CELL/2 - 4, y + 6, x + CELL/2 + 2, y + 6); }
-      else              { drawEyes(x + CELL/2 - 4, y + CELL - 10, x + CELL/2 + 2, y + CELL - 10); }
+  <div class="bk note">
+    <h4>Fahrenheit vs. Celsius</h4>
+    <p>Nos EUA, a temperatura é em <strong>Fahrenheit</strong>. Referência rápida: <strong>32°F</strong> = 0°C (congelamento), <strong>50°F</strong> = 10°C (fresco), <strong>68°F</strong> = 20°C (agradável), <strong>86°F</strong> = 30°C (quente), <strong>100°F</strong> = 38°C (muito quente). Fórmula mental rápida: subtraia 30 e divida por 2 para uma estimativa aproximada em Celsius.</p>
+  </div>
+</section>
+<div class="sep"><span class="d"></span></div>
+<!-- ███ 9 ███ -->
+<section class="sc" id="s9">
+  <div class="sc-tag"><span class="n">9</span> False Friends</div>
+  <h2>Falsos Cognatos e Armadilhas de Pronúncia</h2>
+  <p class="sc-sub">As palavras que parecem iguais ao português — mas significam coisas completamente diferentes.</p>
 
-    } else {
-      // body — gradient from gold to transparent
-      const gAlpha = Math.max(0.08, alpha);
-      ctx.fillStyle = `rgba(196,164,90,${gAlpha})`;
-      roundRect(ctx, x + 4 + t * 2, y + 4 + t * 2, CELL - 8 - t * 4, CELL - 8 - t * 4, 5);
-      ctx.fill();
+  <div class="gr"><div class="gr-t">Falsos cognatos mais perigosos para viajantes</div>
+    <div class="cd"><div class="en">"Actually" ≠ Atualmente</div><div class="pt"><strong>Actually</strong> = na verdade / de fato. "Atualmente" = <strong>currently / nowadays</strong>.</div></div>
+    <div class="cd"><div class="en">"Constipated" ≠ Constipado</div><div class="pt"><strong>Constipated</strong> = intestino preso. "Constipado" (resfriado) = <strong>I have a cold</strong>.</div></div>
+    <div class="cd"><div class="en">"Push" ≠ Puxe</div><div class="pt"><strong>Push</strong> = empurre. "Puxe" = <strong>Pull</strong>. Nas portas, PUSH = empurre, PULL = puxe.</div></div>
+    <div class="cd"><div class="en">"Pretend" ≠ Pretender</div><div class="pt"><strong>Pretend</strong> = fingir. "Pretender" = <strong>intend / plan to</strong>.</div></div>
+    <div class="cd"><div class="en">"Sensible" ≠ Sensível</div><div class="pt"><strong>Sensible</strong> = sensato. "Sensível" = <strong>sensitive</strong>.</div></div>
+    <div class="cd"><div class="en">"Fabric" ≠ Fábrica</div><div class="pt"><strong>Fabric</strong> = tecido. "Fábrica" = <strong>factory</strong>.</div></div>
+    <div class="cd"><div class="en">"Resume" ≠ Resumo</div><div class="pt"><strong>Resume</strong> (ou résumé) = currículo. "Resumo" = <strong>summary</strong>.</div></div>
+    <div class="cd"><div class="en">"Injury" ≠ Injúria</div><div class="pt"><strong>Injury</strong> = lesão / ferimento. "Injúria" = <strong>insult / slander</strong>.</div></div>
+    <div class="cd"><div class="en">"Exquisite" ≠ Esquisito</div><div class="pt"><strong>Exquisite</strong> = requintado / sofisticado. "Esquisito" = <strong>weird / strange</strong>.</div></div>
+    <div class="cd"><div class="en">"Attend" ≠ Atender</div><div class="pt"><strong>Attend</strong> = comparecer / participar. "Atender (telefone)" = <strong>answer</strong>. "Atender (cliente)" = <strong>serve / help</strong>.</div></div>
+  </div>
 
-      // inner shine
-      if (alpha > 0.3) {
-        ctx.fillStyle = `rgba(212,186,122,${gAlpha * 0.4})`;
-        roundRect(ctx, x + 7, y + 7, CELL - 14, 4, 2);
-        ctx.fill();
-      }
-    }
-  });
-}
+  <div class="bk tip">
+    <h4>Dica de Ouro</h4>
+    <p>A mais perigosa de todas: <strong>"I'm constipated"</strong> dita num contexto médico. O brasileiro quer dizer que está resfriado, mas o médico entende que seu intestino está preso. Na farmácia, isso resulta em laxante em vez de antigripal. Diga: <strong>"I have a cold"</strong> ou <strong>"I have the flu"</strong>.</p>
+  </div>
+</section>
+<div class="sep"><span class="d"></span></div>
+<!-- ███ 10 ███ -->
+<section class="sc" id="s10">
+  <div class="sc-tag"><span class="n">10</span> Opinions & Feelings</div>
+  <h2>Expressando Opiniões e Sentimentos</h2>
+  <p class="sc-sub">Além do "I like it" — como dizer o que sente com nuance e naturalidade.</p>
 
-function drawEyes(x1, y1, x2, y2) {
-  ctx.fillStyle = '#050D1A';
-  ctx.beginPath(); ctx.arc(x1 + 2, y1 + 2, 2.5, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(x2 + 2, y2 + 2, 2.5, 0, Math.PI * 2); ctx.fill();
-  ctx.fillStyle = 'rgba(255,255,255,0.7)';
-  ctx.beginPath(); ctx.arc(x1 + 3, y1 + 1, 1, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(x2 + 3, y2 + 1, 1, 0, Math.PI * 2); ctx.fill();
-}
+  <div class="gr"><div class="gr-t">Expressando prazer e aprovação</div>
+    <div class="cd"><div class="en">"I'm having an amazing time." / "This trip has been incredible."</div><div class="pt">Estou me divertindo muito. / Essa viagem tem sido incrível.</div></div>
+    <div class="cd"><div class="en">"This is exactly what I needed."</div><div class="pt">Isso era exatamente o que eu precisava.</div></div>
+    <div class="cd"><div class="en">"I absolutely love this place."</div><div class="pt">Amo este lugar.</div></div>
+    <div class="cd"><div class="en">"This exceeded my expectations."</div><div class="pt">Isso superou minhas expectativas.</div></div>
+  </div>
 
-function drawFoodWord(item) {
-  const x = item.x * CELL;
-  const y = item.y * CELL;
+  <div class="gr"><div class="gr-t">Expressando insatisfação (com educação)</div>
+    <div class="cd"><div class="en">"It's not quite what I expected."</div><div class="pt">Não é bem o que eu esperava. — Forma educada de dizer que decepcionou.</div></div>
+    <div class="cd"><div class="en">"I was a little disappointed with..."</div><div class="pt">Fiquei um pouco decepcionado(a) com...</div></div>
+    <div class="cd"><div class="en">"It's okay, but I've seen better."</div><div class="pt">É legal, mas já vi melhor.</div></div>
+    <div class="cd"><div class="en">"Honestly, it wasn't worth the price."</div><div class="pt">Sinceramente, não valeu o preço.</div></div>
+  </div>
 
-  // pulsing glow halo
-  const time = Date.now() / 1000;
-  const pulse = 0.5 + 0.5 * Math.sin(time * 3);
+  <div class="gr"><div class="gr-t">Expressando cansaço e necessidade</div>
+    <div class="cd"><div class="en">"I'm exhausted. I need to rest."</div><div class="pt">Estou exausto(a). Preciso descansar.</div></div>
+    <div class="cd"><div class="en">"I'm jet-lagged. What time is it again?"</div><div class="pt">Estou com jet lag. Que horas são mesmo?</div></div>
+    <div class="cd"><div class="en">"I'm starving. Let's find somewhere to eat."</div><div class="pt">Estou morrendo de fome. Vamos achar um lugar para comer.</div></div>
+    <div class="cd"><div class="en">"I need a break. Let's sit down for a bit."</div><div class="pt">Preciso de uma pausa. Vamos sentar um pouco.</div></div>
+  </div>
+</section>
+<div class="sep"><span class="d"></span></div>
+<!-- ███ 11 ███ -->
+<section class="sc" id="s11">
+  <div class="sc-tag"><span class="n">11</span> Coming Home</div>
+  <h2>Voltando para Casa</h2>
+  <p class="sc-sub">O que dizer no duty free, na alfândega brasileira e ao se despedir de quem conheceu.</p>
 
-  ctx.save();
-  ctx.shadowColor  = `rgba(196,164,90,${0.4 + pulse * 0.4})`;
-  ctx.shadowBlur   = 16 + pulse * 10;
+  <div class="gr"><div class="gr-t">No aeroporto de volta</div>
+    <div class="cd"><div class="en">"I'd like to check in for my return flight. Here's my passport."</div><div class="pt">Gostaria de fazer check-in para meu voo de volta. Aqui está meu passaporte.</div></div>
+    <div class="cd"><div class="en">"How much duty-free am I allowed to bring back?"</div><div class="pt">Quanto de duty-free posso levar de volta?</div></div>
+    <div class="cd"><div class="en">"Do I need to declare these items at customs when I arrive in Brazil?"</div><div class="pt">Preciso declarar esses itens na alfândega quando chegar no Brasil?</div></div>
+  </div>
 
-  // cell highlight
-  const grad = ctx.createRadialGradient(x + CELL/2, y + CELL/2, 2, x + CELL/2, y + CELL/2, CELL);
-  grad.addColorStop(0, `rgba(196,164,90,${0.22 + pulse * 0.1})`);
-  grad.addColorStop(1, 'rgba(196,164,90,0)');
-  ctx.fillStyle = grad;
-  roundRect(ctx, x + 1, y + 1, CELL - 2, CELL - 2, 8);
-  ctx.fill();
+  <div class="gr"><div class="gr-t">Despedindo-se de pessoas que conheceu</div>
+    <div class="cd"><div class="en">"It was so nice meeting you. I hope we stay in touch."</div><div class="pt">Foi muito bom te conhecer. Espero que a gente mantenha contato.</div></div>
+    <div class="cd"><div class="en">"Thank you for everything. You made this trip unforgettable."</div><div class="pt">Obrigado(a) por tudo. Você tornou essa viagem inesquecível.</div></div>
+    <div class="cd"><div class="en">"If you ever come to Brazil, let me know. I'd love to show you around."</div><div class="pt">Se um dia for ao Brasil, me avise. Adoraria te mostrar os lugares.</div></div>
+    <div class="cd"><div class="en">"Let's connect on Instagram. My handle is @[nome]."</div><div class="pt">Vamos nos conectar no Instagram. Meu @ é [nome].</div></div>
+    <div class="cd"><div class="en">"Safe travels!" / "Have a safe flight!"</div><div class="pt">Boa viagem! / Tenha um bom voo!</div></div>
+  </div>
 
-  // border
-  ctx.strokeStyle = `rgba(196,164,90,${0.5 + pulse * 0.3})`;
-  ctx.lineWidth   = 1.5;
-  roundRect(ctx, x + 2, y + 2, CELL - 4, CELL - 4, 7);
-  ctx.stroke();
-  ctx.restore();
+  <div class="bk tip">
+    <h4>Avaliações e Agradecimentos</h4>
+    <p>Se teve uma experiência excelente em algum lugar — hotel, restaurante, tour — deixe uma avaliação. Frase útil: <strong>"I had an incredible experience at [place]. [Nome da pessoa] was especially helpful and made our stay special."</strong> (Tive uma experiência incrível em [lugar]. [Nome] foi especialmente prestativo(a) e tornou nossa estadia especial.) Avaliações positivas com nomes fazem diferença real na carreira dessas pessoas.</p>
+  </div>
+</section>
+<div class="sep"><span class="d"></span></div>
+<!-- ███ 12 ███ -->
+<section class="sc" id="s12">
+  <div class="sc-tag"><span class="n">12</span> Final Mindset</div>
+  <h2>O Mindset do Viajante Confiante</h2>
+  <p class="sc-sub">Não é sobre perfeição. É sobre postura.</p>
 
-  // word — adaptive font size
-  const word = item.en;
-  const maxW  = CELL * 3.2;
-  let fontSize = 11;
-  ctx.font = `500 ${fontSize}px 'Raleway', sans-serif`;
-  while (ctx.measureText(word).width > maxW - 8 && fontSize > 7) {
-    fontSize--;
-    ctx.font = `500 ${fontSize}px 'Raleway', sans-serif`;
-  }
+  <p class="sc-intro">Você chegou ao final deste curso. Antes de fechar esta página, há algo que nenhuma frase, nenhum diálogo e nenhum vocabulário substitui: o mindset certo. As palavras mais importantes que você vai usar na viagem não estão em inglês — estão na forma como você se posiciona.</p>
 
-  ctx.save();
-  ctx.shadowColor = 'rgba(196,164,90,.8)';
-  ctx.shadowBlur  = 8;
-  ctx.fillStyle   = `rgba(232,217,176,${0.85 + pulse * 0.15})`;
-  ctx.textAlign   = 'center';
-  ctx.textBaseline = 'middle';
+  <div class="gr"><div class="gr-t">Os 7 princípios do viajante confiante</div>
+    <div class="cd"><div class="en">"I don't need to be perfect. I need to be understood."</div><div class="pt"><strong>Princípio 1:</strong> Não preciso ser perfeito. Preciso ser compreendido. — Comunicação eficaz é mais importante do que gramática impecável.</div></div>
+    <div class="cd"><div class="en">"Thank you for your patience."</div><div class="pt"><strong>Princípio 2:</strong> Gratidão, não desculpa. — Troque "Sorry for my English" por "Thank you for your patience". Muda tudo.</div></div>
+    <div class="cd"><div class="en">"Could you say that again?"</div><div class="pt"><strong>Princípio 3:</strong> Pedir repetição é inteligência, não fraqueza. — Nativos pedem repetição uns aos outros o tempo todo.</div></div>
+    <div class="cd"><div class="en">"I speak two languages. Most people I'll meet speak one."</div><div class="pt"><strong>Princípio 4:</strong> Eu falo duas línguas. A maioria das pessoas que vou encontrar fala uma. — Você é quem está fazendo o esforço. Orgulhe-se disso.</div></div>
+    <div class="cd"><div class="en">"Every mistake is a story I'll tell later."</div><div class="pt"><strong>Princípio 5:</strong> Todo erro é uma história que vou contar depois. — Os momentos mais memoráveis de viagem vêm dos tropeços, não da perfeição.</div></div>
+    <div class="cd"><div class="en">"I prepared. I practiced. I'm ready."</div><div class="pt"><strong>Princípio 6:</strong> Eu me preparei. Eu pratiquei. Estou pronto(a). — Você fez este curso inteiro. Isso já te coloca à frente de 90% dos viajantes.</div></div>
+    <div class="cd"><div class="en">"The world is kind to those who try."</div><div class="pt"><strong>Princípio 7:</strong> O mundo é gentil com quem tenta. — Um sorriso, um "excuse me" e uma atitude aberta abrem mais portas do que vocabulário perfeito.</div></div>
+  </div>
 
-  // draw word ABOVE the cell if it would overflow right
-  const textX = x + CELL / 2;
-  let textY   = y - 10; // above cell
-  if (textY < 14) textY = y + CELL + 14; // below instead
+  <div class="dlg">
+    <div class="dlg-h">Diálogo Final — O Viajante Confiante</div>
+    <div class="dlg-ctx">Último dia da viagem — conversando com o concierge do hotel</div>
+    <div class="ln"><div class="av you">You</div><div class="bb"><div class="en">Hi! I'm checking out today. I just wanted to say thank you for everything this week. You've been incredibly helpful.</div><div class="pt">Oi! Faço check-out hoje. Só queria agradecer por tudo nesta semana. Você foi incrivelmente prestativo(a).</div></div></div>
+    <div class="ln"><div class="av them">CON</div><div class="bb"><div class="en">That's so kind of you! It was a pleasure having you. Did you enjoy your stay?</div><div class="pt">Que gentileza! Foi um prazer ter você conosco. Aproveitou a estadia?</div></div></div>
+    <div class="ln"><div class="av you">You</div><div class="bb"><div class="en">Absolutely. The restaurant you recommended on Tuesday was unforgettable. And the walking tour you suggested was the highlight of the trip.</div><div class="pt">Com certeza. O restaurante que você recomendou na terça foi inesquecível. E o walking tour que sugeriu foi o ponto alto da viagem.</div></div></div>
+    <div class="ln"><div class="av them">CON</div><div class="bb"><div class="en">I'm so glad to hear that! Will you be coming back to the city?</div><div class="pt">Fico muito feliz em ouvir isso! Vai voltar à cidade?</div></div></div>
+    <div class="ln"><div class="av you">You</div><div class="bb"><div class="en">I hope so. And if you ever make it to Brazil, let me know. I'd love to return the favor.</div><div class="pt">Espero que sim. E se um dia for ao Brasil, me avise. Adoraria retribuir.</div></div></div>
+    <div class="ln"><div class="av them">CON</div><div class="bb"><div class="en">I might take you up on that! Safe travels, and have a wonderful flight home.</div><div class="pt">Posso aceitar essa oferta! Boa viagem, e tenha um ótimo voo de volta.</div></div></div>
+    <div class="ln"><div class="av you">You</div><div class="bb"><div class="en">Thank you. Take care!</div><div class="pt">Obrigado(a). Se cuida!</div></div></div>
+  </div>
 
-  ctx.font = `500 ${fontSize}px 'Raleway', sans-serif`;
-  ctx.letterSpacing = '0.1em';
-  ctx.fillText(word.toUpperCase(), textX, textY);
-
-  // small gold dot on the cell center
-  ctx.fillStyle = `rgba(196,164,90,${0.7 + pulse * 0.3})`;
-  ctx.beginPath(); ctx.arc(x + CELL/2, y + CELL/2, 4, 0, Math.PI * 2); ctx.fill();
-
-  ctx.restore();
-}
-
-function roundRect(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.lineTo(x + w - r, y);
-  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-  ctx.lineTo(x + w, y + h - r);
-  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-  ctx.lineTo(x + r, y + h);
-  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-  ctx.lineTo(x, y + r);
-  ctx.quadraticCurveTo(x, y, x + r, y);
-  ctx.closePath();
-}
-
-// ─── UI UPDATES ──────────────────────────────────────────────────────────────
-function updateScoreDisplay() {
-  const el = document.getElementById('scoreDisplay');
-  el.textContent = score;
-  el.classList.remove('pulse');
-  void el.offsetWidth;
-  el.classList.add('pulse');
-}
-
-function updateLevelDisplay() {
-  document.getElementById('levelDisplay').textContent = ROMAN[level - 1] || level;
-}
-
-function showWordToast(item) {
-  const el = document.getElementById('wordToast');
-  el.textContent = `${item.en} — ${item.pt}`;
-  el.classList.remove('show');
-  void el.offsetWidth;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 900);
-}
-
-function updateGlossary() {
-  const g = document.getElementById('glossary');
-  // keep title
-  const title = g.querySelector('.glossary-title');
-  g.innerHTML = '';
-  g.appendChild(title);
-  collected.slice(0, 6).forEach((item, i) => {
-    const entry = document.createElement('div');
-    entry.className = 'glossary-entry';
-    entry.style.animationDelay = `${i * 50}ms`;
-    entry.innerHTML = `<div class="glossary-word">${item.en}</div><div class="glossary-pt">${item.pt}</div>`;
-    g.appendChild(entry);
-  });
-}
-
-function showOverlay(which) {
-  document.getElementById('overlayStart').classList.add('hidden');
-  document.getElementById('overlayOver').classList.add('hidden');
-  if (which === 'start') {
-    document.getElementById('overlayStart').classList.remove('hidden');
-  } else if (which === 'over') {
-    document.getElementById('finalScore').textContent = score;
-    const last = collected[0];
-    document.getElementById('lastWord').textContent = last
-      ? `Último termo: ${last.en} — ${last.pt}`
-      : 'Continue praticando!';
-    document.getElementById('overlayOver').classList.remove('hidden');
-  }
-}
-
-// ─── ANIMATION LOOP (for food pulse while running) ────────────────────────────
-let rafId;
-function animate() {
-  if (running && !paused) draw();
-  rafId = requestAnimationFrame(animate);
-}
-animate();
-
-// ─── CONTROLS ────────────────────────────────────────────────────────────────
-document.addEventListener('keydown', e => {
-  const key = e.key;
-  if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d'].includes(key)) {
-    e.preventDefault();
-  }
-  if (!running) return;
-  if (key === 'p' || key === 'P') {
-    paused = !paused;
-    return;
-  }
-  const map = {
-    ArrowUp:    { x: 0,  y: -1 },
-    ArrowDown:  { x: 0,  y:  1 },
-    ArrowLeft:  { x: -1, y:  0 },
-    ArrowRight: { x: 1,  y:  0 },
-    w:          { x: 0,  y: -1 },
-    s:          { x: 0,  y:  1 },
-    a:          { x: -1, y:  0 },
-    d:          { x: 1,  y:  0 },
-  };
-  const nd = map[key];
-  if (nd && !(nd.x === -dir.x && nd.y === -dir.y)) {
-    nextDir = nd;
-  }
-});
-
-// Touch/swipe support
-let touchStart = null;
-canvas.addEventListener('touchstart', e => {
-  touchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-}, { passive: true });
-canvas.addEventListener('touchend', e => {
-  if (!touchStart) return;
-  const dx = e.changedTouches[0].clientX - touchStart.x;
-  const dy = e.changedTouches[0].clientY - touchStart.y;
-  if (Math.abs(dx) > Math.abs(dy)) {
-    const nd = dx > 0 ? { x: 1, y: 0 } : { x: -1, y: 0 };
-    if (!(nd.x === -dir.x)) nextDir = nd;
-  } else {
-    const nd = dy > 0 ? { x: 0, y: 1 } : { x: 0, y: -1 };
-    if (!(nd.y === -dir.y)) nextDir = nd;
-  }
-  touchStart = null;
-}, { passive: true });
-
-// ─── BUTTONS ─────────────────────────────────────────────────────────────────
-document.getElementById('btnStart').addEventListener('click', () => {
-  document.getElementById('overlayStart').classList.add('hidden');
-  initGame();
-});
-document.getElementById('btnRestart').addEventListener('click', () => {
-  document.getElementById('overlayOver').classList.add('hidden');
-  initGame();
-});
-
-// ─── RESIZE ──────────────────────────────────────────────────────────────────
-window.addEventListener('resize', () => {
-  if (!running) { resize(); draw(); }
-});
-
-// initial draw
-draw();
-</script>
-</body>
-</html>
+  <div class="bk final">
+    <h4>Parabéns — Você Completou o Curso</h4>
+    <p>Você percorreu todos os módulos: das primeiras impressões à imigração, do aluguel de carro ao pronto-socorro, das compras ao fine dining, e chegou até aqui — pronto(a) para viajar com confiança, clareza e postura. Lembre-se: <strong>fluência não é ausência de erros — é a capacidade de se conectar com pessoas, resolver problemas e aproveitar cada momento, mesmo quando as palavras não saem perfeitas.</strong> O mundo está esperando por você. Agora vá — e tenha uma viagem extraordinária.</p>
+  </div>
+</section>
+<div class="sep"><span class="d"></span></div>
+<footer class="footer">
+  <div class="footer-b">The Confident Traveler</div>
+  <p class="footer-sub">Módulo Bônus Final — English for Travelers</p>
+  <p class="footer-t">Conteúdo exclusivo para fins educacionais.<br>Desenvolvido com excelência para alunos que buscam comunicação internacional de alto nível.</p>
+</footer>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p></main>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
