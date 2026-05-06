@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MD Talk — Sala de Espera</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Raleway:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:       #0B1D3A;
+    --navy-deep:  #050D1A;
+    --navy-mid:   #0F2645;
+    --navy-light: #163158;
+    --gold:       #C4A45A;
+    --gold-light: #D4BA7A;
+    --gold-pale:  #E8D9B0;
+    --cream:      rgba(255,255,255,.88);
+    --muted:      rgba(255,255,255,.42);
+    --snake-head: #C4A45A;
+    --snake-body: #D4BA7A;
+    --snake-tail: rgba(196,164,90,0.4);
+    --cell:       44px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--navy-deep);
+    font-family: 'Raleway', sans-serif;
+    overflow: hidden;
+    color: var(--cream);
+  }
+
+  /* ─── DOT GRID BACKGROUND ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: radial-gradient(circle, rgba(196,164,90,.18) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── AMBIENT GLOW ─── */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -20%; left: 50%; transform: translateX(-50%);
+    width: 800px; height: 600px;
+    background: radial-gradient(ellipse, rgba(196,164,90,.06) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── FLOATING GEO ELEMENTS ─── */
+  .geo {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    animation: geoFloat 8s ease-in-out infinite;
+  }
+  .geo-ring {
+    width: 120px; height: 120px;
+    border: 1px solid rgba(196,164,90,.12);
+    border-radius: 50%;
+    top: 8%; right: 6%;
+    animation-duration: 11s;
+  }
+  .geo-ring-2 {
+    width: 60px; height: 60px;
+    border: 1px solid rgba(196,164,90,.18);
+    border-radius: 50%;
+    bottom: 14%; left: 4%;
+    animation-duration: 9s;
+    animation-delay: -3s;
+  }
+  .geo-diamond {
+    width: 18px; height: 18px;
+    border: 1px solid rgba(196,164,90,.3);
+    transform: rotate(45deg);
+    top: 50%; right: 4%;
+    animation-duration: 13s;
+    animation-delay: -5s;
+  }
+  .geo-line {
+    width: 1px; height: 80px;
+    background: linear-gradient(to bottom, transparent, rgba(196,164,90,.25), transparent);
+    top: 20%; left: 8%;
+    animation-duration: 7s;
+    animation-delay: -2s;
+  }
+  @keyframes geoFloat {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-14px); }
+  }
+  .geo-diamond { animation: geoPulse 13s ease-in-out infinite; }
+  @keyframes geoPulse {
+    0%, 100% { transform: rotate(45deg) scale(1);   opacity: .3; }
+    50%       { transform: rotate(45deg) scale(1.3); opacity: .7; }
+  }
+
+  /* ─── LAYOUT ─── */
+  .wrapper {
+    position: relative; z-index: 1;
+    width: 100vw; height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 0 0 0 0;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 48px 20px;
+    border-bottom: 1px solid rgba(196,164,90,.12);
+  }
+  .brand {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .brand-overline {
+    font-family: 'Raleway', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .brand-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 400;
+    letter-spacing: .08em;
+    color: var(--cream);
+    line-height: 1;
+  }
+  .brand-name em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .header-right {
+    text-align: right;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .header-tag {
+    font-size: 9px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+  }
+  .header-score-label {
+    font-size: 11px;
+    letter-spacing: .12em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .header-score-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--gold-light);
+    line-height: 1;
+    transition: all .2s;
+  }
+
+  /* ─── MAIN ARENA ─── */
+  .arena {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  #canvas-wrap {
+    position: relative;
+  }
+
+  canvas {
+    display: block;
+    border: 1px solid rgba(196,164,90,.2);
+    box-shadow:
+      0 0 60px rgba(196,164,90,.06),
+      inset 0 0 80px rgba(5,13,26,.6);
+    background: rgba(5,13,26,.55);
+    backdrop-filter: blur(2px);
+  }
+
+  /* ─── WORD FLOATING LABELS (rendered on canvas overlay) ─── */
+  .word-label {
+    position: absolute;
+    font-family: 'Raleway', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    pointer-events: none;
+    transition: opacity .4s, transform .3s;
+    white-space: nowrap;
+    text-shadow: 0 0 12px rgba(196,164,90,.4);
+  }
+  .word-label.eaten {
+    animation: wordEaten .6s forwards;
+  }
+  @keyframes wordEaten {
+    0%   { opacity: 1; transform: scale(1.4);    color: #fff; }
+    100% { opacity: 0; transform: scale(2) translateY(-20px); }
+  }
+
+  /* ─── OVERLAY SCREENS ─── */
+  .overlay {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 20px;
+    background: rgba(5,13,26,.85);
+    backdrop-filter: blur(6px);
+    z-index: 10;
+    transition: opacity .5s;
+  }
+  .overlay.hidden { opacity: 0; pointer-events: none; }
+
+  .overlay-overline {
+    font-size: 9px;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+  }
+  .overlay-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 300;
+    color: var(--cream);
+    text-align: center;
+    line-height: 1.1;
+  }
+  .overlay-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .overlay-divider {
+    width: 60px; height: 1px;
+    background: var(--gold);
+    opacity: .5;
+  }
+  .overlay-sub {
+    font-size: 12px;
+    letter-spacing: .1em;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.8;
+  }
+  .overlay-score-display {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px;
+    font-weight: 300;
+    color: var(--gold-light);
+    line-height: 1;
+  }
+  .overlay-score-label {
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: -12px;
+  }
+
+  .btn-start {
+    margin-top: 8px;
+    padding: 14px 48px;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Raleway', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all .25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-start::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--gold);
+    transform: translateX(-101%);
+    transition: transform .25s;
+    z-index: -1;
+  }
+  .btn-start:hover { color: var(--navy-deep); }
+  .btn-start:hover::before { transform: translateX(0); }
+
+  /* ─── GLOSSARY TICKER ─── */
+  .word-earned {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-style: italic;
+    color: var(--gold-light);
+    text-align: center;
+    pointer-events: none;
+    z-index: 20;
+    opacity: 0;
+    text-shadow: 0 0 30px rgba(196,164,90,.6);
+  }
+  .word-earned.show {
+    animation: wordPop .9s forwards;
+  }
+  @keyframes wordPop {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    20%  { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+    70%  { opacity: 1; transform: translate(-50%, -50%) scale(1);   }
+    100% { opacity: 0; transform: translate(-50%, -60%) scale(0.95); }
+  }
+
+  /* ─── GLOSSARY SIDEBAR ─── */
+  .glossary {
+    position: fixed;
+    right: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 60vh;
+    overflow: hidden;
+    z-index: 5;
+    width: 220px;
+  }
+  .glossary-title {
+    font-size: 8px;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 4px;
+    opacity: .7;
+  }
+  .glossary-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    opacity: 0;
+    transform: translateX(20px);
+    animation: slideIn .4s forwards;
+    border-left: 1px solid rgba(196,164,90,.25);
+    padding-left: 10px;
+  }
+  @keyframes slideIn {
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .glossary-word {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    color: var(--gold-light);
+    font-style: italic;
+  }
+  .glossary-pt {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .05em;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid rgba(196,164,90,.1);
+    padding: 14px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(to right, rgba(196,164,90,.04), transparent);
+  }
+  .footer-controls {
+    display: flex; gap: 24px;
+  }
+  .key-hint {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 10px;
+    letter-spacing: .12em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .key {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px;
+    border: 1px solid rgba(196,164,90,.3);
+    color: var(--gold);
+    font-size: 9px;
+    font-weight: 600;
+    border-radius: 3px;
+  }
+  .footer-level {
+    font-size: 10px;
+    letter-spacing: .15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .footer-level span {
+    color: var(--gold);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-weight: 300;
+  }
+
+  /* score pulse */
+  @keyframes scorePulse {
+    0%,100% { transform: scale(1); }
+    50%      { transform: scale(1.15); color: #fff; }
+  }
+  .pulse { animation: scorePulse .3s ease; }
+</style>
+</head>
+<body>
+
+<!-- Floating geometric decorations -->
+<div class="geo geo-ring"></div>
+<div class="geo geo-ring-2"></div>
+<div class="geo geo-diamond"></div>
+<div class="geo geo-line"></div>
+
+<!-- Word earned toast -->
+<div class="word-earned" id="wordToast"></div>
+
+<!-- Glossary sidebar -->
+<div class="glossary" id="glossary">
+  <div class="glossary-title">Vocabulário adquirido</div>
+</div>
+
+<div class="wrapper">
+  <!-- HEADER -->
+  <header>
+    <div class="brand">
+      <div class="brand-overline">Instituto MD Talk</div>
+      <div class="brand-name">MD <em>Talk</em></div>
+    </div>
+    <div class="header-right">
+      <div class="header-tag">Sala de Espera</div>
+      <div class="header-score-label">Score</div>
+      <div class="header-score-val" id="scoreDisplay">0</div>
+    </div>
+  </header>
+
+  <!-- ARENA -->
+  <div class="arena" id="arena">
+    <div id="canvas-wrap">
+      <canvas id="game"></canvas>
+    </div>
+
+    <!-- START OVERLAY -->
+    <div class="overlay" id="overlayStart">
+      <div class="overlay-overline">Sala de Espera · MD Talk</div>
+      <div class="overlay-title">Enquanto você <em>aguarda</em>,<br>pratique Medical English</div>
+      <div class="overlay-divider"></div>
+      <div class="overlay-sub">
+        Guie a cobra pelo grid e colete<br>
+        termos clínicos em inglês<br>
+        <br>
+        <span style="color:var(--gold-pale); font-size:10px; letter-spacing:.15em">USE AS SETAS OU WASD PARA MOVER</span>
+      </div>
+      <button class="btn-start" id="btnStart">Iniciar</button>
+    </div>
+
+    <!-- GAME OVER OVERLAY -->
+    <div class="overlay hidden" id="overlayOver">
+      <div class="overlay-overline">Session Ended</div>
+      <div class="overlay-title"><em>Game</em> Over</div>
+      <div class="overlay-divider"></div>
+      <div class="overlay-score-display" id="finalScore">0</div>
+      <div class="overlay-score-label">termos coletados</div>
+      <div class="overlay-sub" id="lastWord"></div>
+      <button class="btn-start" id="btnRestart">Nova Sessão</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-controls">
+      <div class="key-hint"><div class="key">↑</div><div class="key">↓</div><div class="key">←</div><div class="key">→</div> mover</div>
+      <div class="key-hint"><div class="key" style="width:32px">P</div> pausar</div>
+    </div>
+    <div class="footer-level">Nível <span id="levelDisplay">I</span></div>
+  </footer>
+</div>
+
+<script>
+// ─── MEDICAL VOCABULARY ───────────────────────────────────────────────────────
+const VOCAB = [
+  { en: 'dyspnea',        pt: 'dispneia' },
+  { en: 'tachycardia',    pt: 'taquicardia' },
+  { en: 'bradycardia',    pt: 'bradicardia' },
+  { en: 'hypertension',   pt: 'hipertensão' },
+  { en: 'hypoxia',        pt: 'hipóxia' },
+  { en: 'edema',          pt: 'edema' },
+  { en: 'syncope',        pt: 'síncope' },
+  { en: 'auscultation',   pt: 'ausculta' },
+  { en: 'pallor',         pt: 'palidez' },
+  { en: 'cyanosis',       pt: 'cianose' },
+  { en: 'hemoptysis',     pt: 'hemoptise' },
+  { en: 'dysphagia',      pt: 'disfagia' },
+  { en: 'paraesthesia',   pt: 'parestesia' },
+  { en: 'vertigo',        pt: 'vertigem' },
+  { en: 'prognosis',      pt: 'prognóstico' },
+  { en: 'anamnesis',      pt: 'anamnese' },
+  { en: 'triage',         pt: 'triagem' },
+  { en: 'palpation',      pt: 'palpação' },
+  { en: 'percussion',     pt: 'percussão' },
+  { en: 'jaundice',       pt: 'icterícia' },
+  { en: 'diuresis',       pt: 'diurese' },
+  { en: 'embolism',       pt: 'embolia' },
+  { en: 'ischemia',       pt: 'isquemia' },
+  { en: 'infarction',     pt: 'infarto' },
+  { en: 'necrosis',       pt: 'necrose' },
+  { en: 'fibrosis',       pt: 'fibrose' },
+  { en: 'stenosis',       pt: 'estenose' },
+  { en: 'thrombosis',     pt: 'trombose' },
+  { en: 'septicemia',     pt: 'septicemia' },
+  { en: 'hemostasis',     pt: 'hemostasia' },
+  { en: 'diaphoresis',    pt: 'diaforese' },
+  { en: 'epistaxis',      pt: 'epistaxe' },
+  { en: 'oliguria',       pt: 'oligúria' },
+  { en: 'anuria',         pt: 'anúria' },
+  { en: 'hematuria',      pt: 'hematúria' },
+  { en: 'cachexia',       pt: 'caquexia' },
+  { en: 'ascites',        pt: 'ascite' },
+  { en: 'atelectasis',    pt: 'atelectasia' },
+  { en: 'pneumothorax',   pt: 'pneumotórax' },
+  { en: 'emphysema',      pt: 'enfisema' },
+];
+
+const ROMAN = ['I','II','III','IV','V','VI','VII'];
+
+// ─── CANVAS SETUP ────────────────────────────────────────────────────────────
+const canvas = document.getElementById('game');
+const ctx    = canvas.getContext('2d');
+const arena  = document.getElementById('arena');
+
+let COLS, ROWS, CELL, W, H;
+
+function resize() {
+  const pad  = 32;
+  const aw   = arena.clientWidth  - pad * 2;
+  const ah   = arena.clientHeight - pad * 2;
+  CELL = window.innerWidth < 700 ? 36 : 44;
+  COLS = Math.floor(aw / CELL);
+  ROWS = Math.floor(ah / CELL);
+  // keep odd for centering
+  if (COLS % 2 === 0) COLS--;
+  if (ROWS % 2 === 0) ROWS--;
+  COLS = Math.max(11, COLS);
+  ROWS = Math.max(9,  ROWS);
+  W = COLS * CELL;
+  H = ROWS * CELL;
+  canvas.width  = W;
+  canvas.height = H;
+}
+resize();
+
+// ─── GAME STATE ──────────────────────────────────────────────────────────────
+let snake, dir, nextDir, food, score, level, speed, paused, running, intervalId;
+let collected = [];
+let foodItem  = null;
+
+function initGame() {
+  resize();
+  const cx = Math.floor(COLS / 2);
+  const cy = Math.floor(ROWS / 2);
+  snake   = [{ x: cx, y: cy }, { x: cx - 1, y: cy }, { x: cx - 2, y: cy }];
+  dir     = { x: 1, y: 0 };
+  nextDir = { x: 1, y: 0 };
+  score   = 0;
+  level   = 1;
+  speed   = 200;
+  paused  = false;
+  running = true;
+  collected = [];
+  foodItem  = null;
+  updateScoreDisplay();
+  updateLevelDisplay();
+  placeFood();
+  clearInterval(intervalId);
+  intervalId = setInterval(tick, speed);
+}
+
+// ─── FOOD WORDS ──────────────────────────────────────────────────────────────
+function placeFood() {
+  const remaining = VOCAB.filter(v => !collected.find(c => c.en === v.en));
+  const pool = remaining.length > 0 ? remaining : VOCAB;
+  const item = pool[Math.floor(Math.random() * pool.length)];
+  let x, y, safe;
+  let tries = 0;
+  do {
+    x = 1 + Math.floor(Math.random() * (COLS - 2));
+    y = 1 + Math.floor(Math.random() * (ROWS - 2));
+    safe = !snake.some(s => s.x === x && s.y === y);
+    tries++;
+  } while (!safe && tries < 200);
+  foodItem = { x, y, ...item };
+}
+
+// ─── TICK ────────────────────────────────────────────────────────────────────
+function tick() {
+  if (!running || paused) return;
+  dir = { ...nextDir };
+
+  const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+
+  // wall collision
+  if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) {
+    gameOver(); return;
+  }
+  // self collision
+  if (snake.some(s => s.x === head.x && s.y === head.y)) {
+    gameOver(); return;
+  }
+
+  snake.unshift(head);
+
+  if (foodItem && head.x === foodItem.x && head.y === foodItem.y) {
+    eatFood();
+  } else {
+    snake.pop();
+  }
+
+  draw();
+}
+
+function eatFood() {
+  score++;
+  collected.unshift({ en: foodItem.en, pt: foodItem.pt });
+  if (collected.length > 8) collected = collected.slice(0, 8);
+  showWordToast(foodItem);
+  updateGlossary();
+  updateScoreDisplay();
+
+  // level up every 5 words
+  const newLevel = Math.floor(score / 5) + 1;
+  if (newLevel !== level) {
+    level = Math.min(newLevel, 7);
+    speed = Math.max(80, 200 - (level - 1) * 18);
+    clearInterval(intervalId);
+    intervalId = setInterval(tick, speed);
+    updateLevelDisplay();
+  }
+  placeFood();
+}
+
+function gameOver() {
+  running = false;
+  clearInterval(intervalId);
+  draw(); // draw final state
+  setTimeout(() => showOverlay('over'), 600);
+}
+
+// ─── DRAWING ─────────────────────────────────────────────────────────────────
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  // subtle grid lines
+  ctx.strokeStyle = 'rgba(196,164,90,.04)';
+  ctx.lineWidth = 1;
+  for (let c = 0; c <= COLS; c++) {
+    ctx.beginPath(); ctx.moveTo(c * CELL, 0); ctx.lineTo(c * CELL, H); ctx.stroke();
+  }
+  for (let r = 0; r <= ROWS; r++) {
+    ctx.beginPath(); ctx.moveTo(0, r * CELL); ctx.lineTo(W, r * CELL); ctx.stroke();
+  }
+
+  // food word
+  if (foodItem) drawFoodWord(foodItem);
+
+  // snake
+  drawSnake();
+}
+
+function drawSnake() {
+  const len = snake.length;
+  snake.forEach((seg, i) => {
+    const t = i / len; // 0 = head, 1 = tail
+    const x = seg.x * CELL;
+    const y = seg.y * CELL;
+    const pad = 3 + t * 4;
+    const r   = (CELL / 2 - pad);
+    const alpha = 1 - t * 0.6;
+
+    if (i === 0) {
+      // head — gold with glow
+      ctx.save();
+      ctx.shadowColor  = 'rgba(196,164,90,.7)';
+      ctx.shadowBlur   = 18;
+      ctx.fillStyle    = '#C4A45A';
+      roundRect(ctx, x + 3, y + 3, CELL - 6, CELL - 6, 6);
+      ctx.fill();
+      ctx.restore();
+
+      // eyes
+      const eyeSize = 3;
+      ctx.fillStyle = '#050D1A';
+      const ex1 = x + CELL/2 - 4, ey1 = y + CELL/2 - 4;
+      const ex2 = x + CELL/2 + 2, ey2 = y + CELL/2 - 4;
+
+      if (dir.x === 1)  { drawEyes(x + CELL - 10, y + CELL/2 - 4, x + CELL - 10, y + CELL/2 + 2); }
+      else if (dir.x === -1) { drawEyes(x + 6, y + CELL/2 - 4, x + 6, y + CELL/2 + 2); }
+      else if (dir.y === -1) { drawEyes(x + CELL/2 - 4, y + 6, x + CELL/2 + 2, y + 6); }
+      else              { drawEyes(x + CELL/2 - 4, y + CELL - 10, x + CELL/2 + 2, y + CELL - 10); }
+
+    } else {
+      // body — gradient from gold to transparent
+      const gAlpha = Math.max(0.08, alpha);
+      ctx.fillStyle = `rgba(196,164,90,${gAlpha})`;
+      roundRect(ctx, x + 4 + t * 2, y + 4 + t * 2, CELL - 8 - t * 4, CELL - 8 - t * 4, 5);
+      ctx.fill();
+
+      // inner shine
+      if (alpha > 0.3) {
+        ctx.fillStyle = `rgba(212,186,122,${gAlpha * 0.4})`;
+        roundRect(ctx, x + 7, y + 7, CELL - 14, 4, 2);
+        ctx.fill();
+      }
+    }
+  });
+}
+
+function drawEyes(x1, y1, x2, y2) {
+  ctx.fillStyle = '#050D1A';
+  ctx.beginPath(); ctx.arc(x1 + 2, y1 + 2, 2.5, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(x2 + 2, y2 + 2, 2.5, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,0.7)';
+  ctx.beginPath(); ctx.arc(x1 + 3, y1 + 1, 1, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(x2 + 3, y2 + 1, 1, 0, Math.PI * 2); ctx.fill();
+}
+
+function drawFoodWord(item) {
+  const x = item.x * CELL;
+  const y = item.y * CELL;
+
+  // pulsing glow halo
+  const time = Date.now() / 1000;
+  const pulse = 0.5 + 0.5 * Math.sin(time * 3);
+
+  ctx.save();
+  ctx.shadowColor  = `rgba(196,164,90,${0.4 + pulse * 0.4})`;
+  ctx.shadowBlur   = 16 + pulse * 10;
+
+  // cell highlight
+  const grad = ctx.createRadialGradient(x + CELL/2, y + CELL/2, 2, x + CELL/2, y + CELL/2, CELL);
+  grad.addColorStop(0, `rgba(196,164,90,${0.22 + pulse * 0.1})`);
+  grad.addColorStop(1, 'rgba(196,164,90,0)');
+  ctx.fillStyle = grad;
+  roundRect(ctx, x + 1, y + 1, CELL - 2, CELL - 2, 8);
+  ctx.fill();
+
+  // border
+  ctx.strokeStyle = `rgba(196,164,90,${0.5 + pulse * 0.3})`;
+  ctx.lineWidth   = 1.5;
+  roundRect(ctx, x + 2, y + 2, CELL - 4, CELL - 4, 7);
+  ctx.stroke();
+  ctx.restore();
+
+  // word — adaptive font size
+  const word = item.en;
+  const maxW  = CELL * 3.2;
+  let fontSize = 11;
+  ctx.font = `500 ${fontSize}px 'Raleway', sans-serif`;
+  while (ctx.measureText(word).width > maxW - 8 && fontSize > 7) {
+    fontSize--;
+    ctx.font = `500 ${fontSize}px 'Raleway', sans-serif`;
+  }
+
+  ctx.save();
+  ctx.shadowColor = 'rgba(196,164,90,.8)';
+  ctx.shadowBlur  = 8;
+  ctx.fillStyle   = `rgba(232,217,176,${0.85 + pulse * 0.15})`;
+  ctx.textAlign   = 'center';
+  ctx.textBaseline = 'middle';
+
+  // draw word ABOVE the cell if it would overflow right
+  const textX = x + CELL / 2;
+  let textY   = y - 10; // above cell
+  if (textY < 14) textY = y + CELL + 14; // below instead
+
+  ctx.font = `500 ${fontSize}px 'Raleway', sans-serif`;
+  ctx.letterSpacing = '0.1em';
+  ctx.fillText(word.toUpperCase(), textX, textY);
+
+  // small gold dot on the cell center
+  ctx.fillStyle = `rgba(196,164,90,${0.7 + pulse * 0.3})`;
+  ctx.beginPath(); ctx.arc(x + CELL/2, y + CELL/2, 4, 0, Math.PI * 2); ctx.fill();
+
+  ctx.restore();
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+// ─── UI UPDATES ──────────────────────────────────────────────────────────────
+function updateScoreDisplay() {
+  const el = document.getElementById('scoreDisplay');
+  el.textContent = score;
+  el.classList.remove('pulse');
+  void el.offsetWidth;
+  el.classList.add('pulse');
+}
+
+function updateLevelDisplay() {
+  document.getElementById('levelDisplay').textContent = ROMAN[level - 1] || level;
+}
+
+function showWordToast(item) {
+  const el = document.getElementById('wordToast');
+  el.textContent = `${item.en} — ${item.pt}`;
+  el.classList.remove('show');
+  void el.offsetWidth;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 900);
+}
+
+function updateGlossary() {
+  const g = document.getElementById('glossary');
+  // keep title
+  const title = g.querySelector('.glossary-title');
+  g.innerHTML = '';
+  g.appendChild(title);
+  collected.slice(0, 6).forEach((item, i) => {
+    const entry = document.createElement('div');
+    entry.className = 'glossary-entry';
+    entry.style.animationDelay = `${i * 50}ms`;
+    entry.innerHTML = `<div class="glossary-word">${item.en}</div><div class="glossary-pt">${item.pt}</div>`;
+    g.appendChild(entry);
+  });
+}
+
+function showOverlay(which) {
+  document.getElementById('overlayStart').classList.add('hidden');
+  document.getElementById('overlayOver').classList.add('hidden');
+  if (which === 'start') {
+    document.getElementById('overlayStart').classList.remove('hidden');
+  } else if (which === 'over') {
+    document.getElementById('finalScore').textContent = score;
+    const last = collected[0];
+    document.getElementById('lastWord').textContent = last
+      ? `Último termo: ${last.en} — ${last.pt}`
+      : 'Continue praticando!';
+    document.getElementById('overlayOver').classList.remove('hidden');
+  }
+}
+
+// ─── ANIMATION LOOP (for food pulse while running) ────────────────────────────
+let rafId;
+function animate() {
+  if (running && !paused) draw();
+  rafId = requestAnimationFrame(animate);
+}
+animate();
+
+// ─── CONTROLS ────────────────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  const key = e.key;
+  if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d'].includes(key)) {
+    e.preventDefault();
+  }
+  if (!running) return;
+  if (key === 'p' || key === 'P') {
+    paused = !paused;
+    return;
+  }
+  const map = {
+    ArrowUp:    { x: 0,  y: -1 },
+    ArrowDown:  { x: 0,  y:  1 },
+    ArrowLeft:  { x: -1, y:  0 },
+    ArrowRight: { x: 1,  y:  0 },
+    w:          { x: 0,  y: -1 },
+    s:          { x: 0,  y:  1 },
+    a:          { x: -1, y:  0 },
+    d:          { x: 1,  y:  0 },
+  };
+  const nd = map[key];
+  if (nd && !(nd.x === -dir.x && nd.y === -dir.y)) {
+    nextDir = nd;
+  }
+});
+
+// Touch/swipe support
+let touchStart = null;
+canvas.addEventListener('touchstart', e => {
+  touchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+}, { passive: true });
+canvas.addEventListener('touchend', e => {
+  if (!touchStart) return;
+  const dx = e.changedTouches[0].clientX - touchStart.x;
+  const dy = e.changedTouches[0].clientY - touchStart.y;
+  if (Math.abs(dx) > Math.abs(dy)) {
+    const nd = dx > 0 ? { x: 1, y: 0 } : { x: -1, y: 0 };
+    if (!(nd.x === -dir.x)) nextDir = nd;
+  } else {
+    const nd = dy > 0 ? { x: 0, y: 1 } : { x: 0, y: -1 };
+    if (!(nd.y === -dir.y)) nextDir = nd;
+  }
+  touchStart = null;
+}, { passive: true });
+
+// ─── BUTTONS ─────────────────────────────────────────────────────────────────
+document.getElementById('btnStart').addEventListener('click', () => {
+  document.getElementById('overlayStart').classList.add('hidden');
+  initGame();
+});
+document.getElementById('btnRestart').addEventListener('click', () => {
+  document.getElementById('overlayOver').classList.add('hidden');
+  initGame();
+});
+
+// ─── RESIZE ──────────────────────────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  if (!running) { resize(); draw(); }
+});
+
+// initial draw
+draw();
+</script>
+</body>
+</html>
