@@ -150,6 +150,28 @@ footer.footer .footer-t{font-family:'Nunito Sans',sans-serif;font-size:.76rem;co
 footer.footer .sig{display:flex;flex-direction:column;align-items:center;gap:1.1rem;margin-top:2.2rem;padding-top:2rem;border-top:1px solid #ECEEF4}
 footer.footer .sig-n{font-family:'Bodoni Moda',Georgia,serif;font-size:1.05rem;font-weight:400;color:#141B2D}
 footer.footer .sig-r{font-family:'Nunito Sans',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#C9A84C;margin-top:.15rem}
+
+/* ═══ VIAJE BEM — course-wide standard (same on every module) ═══ */
+main.main,main.course-body{max-width:880px}
+.vb-pager{display:grid;grid-template-columns:1fr auto 1fr;gap:1rem;align-items:stretch;margin:3.5rem 0 0;font-family:'Nunito Sans',sans-serif}
+.vb-pager a{text-decoration:none;color:#141B2D}
+.vb-card{display:flex;flex-direction:column;gap:.35rem;padding:1.1rem 1.3rem;border:1px solid #E3E5EC;border-radius:10px;background:#FFFFFF;transition:border-color .2s ease,transform .2s ease}
+.vb-card:hover{border-color:#C9A84C;transform:translateY(-2px)}
+.vb-next{text-align:right}
+.vb-dir{font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#7A8299}
+.vb-num{font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#C9A84C}
+.vb-t{font-family:'Bodoni Moda',Georgia,serif;font-size:1.08rem;line-height:1.3;color:#141B2D}
+.vb-home{align-self:center;display:inline-flex;align-items:center;padding:.55rem 1.1rem;border:1px solid #E3E5EC;border-radius:100px;background:#FFFFFF;font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#7A8299!important;white-space:nowrap}
+.vb-home:hover{border-color:#C9A84C;color:#141B2D!important}
+.vb-empty{visibility:hidden}
+.vb-dl{display:flex;flex-direction:column;align-items:center;gap:.55rem;margin:3.5rem 0 0;font-family:'Nunito Sans',sans-serif}
+.vb-dl-btn{display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 1.6rem;border-radius:100px;background:#141B2D;color:#FFFFFF!important;text-decoration:none;font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:1px solid #141B2D;transition:background .2s ease,border-color .2s ease}
+.vb-dl-btn:hover{background:#1F2A45;border-color:#C9A84C}
+.vb-dl-btn svg{width:16px;height:16px;fill:none;stroke:#C9A84C;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.vb-dl-meta{font-size:.62rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#7A8299}
+.vb-dl + .vb-pager{margin-top:2.2rem}
+@media(max-width:768px){.vb-pager{grid-template-columns:1fr}.vb-next{text-align:left}.vb-home{justify-self:center;order:3}.vb-empty{display:none}}
+:root{--fd:'Bodoni Moda',Georgia,serif}
 </style>
 </head>
 <body>
@@ -526,6 +548,12 @@ footer.footer .sig-r{font-family:'Nunito Sans',sans-serif;font-size:.6rem;font-w
   </div>
 </section>
 <div class="sep"><span class="d"></span></div>
+<div class="vb-dl"><a class="vb-dl-btn" href="viaje-bem-bonus-final.pdf" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></svg>Baixar o material em PDF</a><span class="vb-dl-meta">PDF · 15 páginas</span></div>
+<nav class="vb-pager" aria-label="Navegação entre módulos">
+  <a class="vb-card vb-prev" href="../bonus-vinhos/"><span class="vb-dir">← Anterior</span><span class="vb-num">Bônus</span><span class="vb-t">Wine English</span></a>
+  <a class="vb-home" href="../">Todos os módulos</a>
+  <a class="vb-card vb-next" href="../"><span class="vb-dir">Fim do curso →</span><span class="vb-num">Início</span><span class="vb-t">Voltar às Boas-Vindas</span></a>
+</nav>
 <footer class="footer">
   <div class="footer-b">The Confident Traveler — English for Travelers</div>
   <p class="footer-t">Conteúdo exclusivo para fins educacionais.<br>Desenvolvido com excelência para alunos que buscam comunicação internacional de alto nível.</p>
